@@ -1,0 +1,61 @@
+.classForm-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.classForm-container #classForm-title {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-weight: 500;
+  line-height: 1.5rem;
+  letter-spacing: .00625em;
+  padding-bottom: 13px;
+}
+
+.classForm-container .input-field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.classForm-container .input-field-container input {
+  font-size: 16px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 10px;
+  background-color: lightgray;
+}
+
+.classForm-container .input-field-container label {
+  
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.classForm-container .classForm-button {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 30px;
+  
+}
+.classForm-container .classForm-button button {
+  background: none;
+  border: none;
+}
+
+.classForm-container .classForm-button #cancel {
+  color: red;
+}
+.classForm-container .classForm-button #confirm {
+  color: grey;
+}
+.classForm-container .classForm-button #confirm:hover {
+  color: blue;
+}
