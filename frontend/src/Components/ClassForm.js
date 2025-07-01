@@ -6,7 +6,7 @@ function CLassForm() {
                 <h2><span id="classForm-title">Create class</span></h2>
                 <div className="input-field-container">
                     <label>Class name (required)</label>
-                    <input className="textbox" placeholder="Input class name"></input>
+                    <input className="textbox" placeholder="Input class name" required></input>
                     <label>Section</label>
                     <input className="textbox" placeholder="Input section"></input>
                     <label>Subject</label>
