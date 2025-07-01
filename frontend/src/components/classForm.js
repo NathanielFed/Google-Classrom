@@ -1,3 +1,4 @@
+import "./ClassForm.css";
 function CLassForm() {
     return (
         <>
