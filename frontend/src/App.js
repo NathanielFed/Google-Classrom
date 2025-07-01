@@ -1,5 +1,5 @@
 import './App.css';
-import CLassForm from './components/ClassForm';
+import CLassForm from './Components/ClassForm';
 
 function App() {
   return (
