@@ -24,4 +24,9 @@ const Navbar = () => {
   );
 };
 
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  navigate("/login");
+};
+
 export default Navbar;
