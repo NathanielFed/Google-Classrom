@@ -1,26 +1,15 @@
 import React from "react";
 import "./Dashboard.css";
 
-// Example data; replace with real data as needed
 const classes = [
   {
-    id: 1,
-    title: "2024-2 CIFP102.ZS11...",
-    section: "MON 03:00PM-04:30PM P113",
-    teacher: "Juan Carlos de los Reyes",
-    department: "ADNU Department of Computer...",
-    badge: "/classroom.png",
-    color: "#388e3c"
-  },
-  {
     id: 2,
-    title: "2024-2 CSMC223.N2...",
-    section: "TTH 04:30PM-06:00PM P217/CSLAB2",
+    title: "24-25 CSDC105.N1Am",
+    section: "Mon-Sat 8-11am P217/CSLAB2",
     teacher: "ADNU Department of Computer...",
     badge: "/classroom.png",
     color: "#1976d2"
   },
-  // Add more class objects as needed
 ];
 
 const Dashboard = () => {
