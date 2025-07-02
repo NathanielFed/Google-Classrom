@@ -1,9 +1,9 @@
 import './App.css';
-import CLassForm from './Components/ClassForm';
+import Stream from './Components/Stream';
 
 function App() {
   return (
-    <CLassForm />
+    <Stream />
   );
 }
 
