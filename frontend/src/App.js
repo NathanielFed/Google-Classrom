@@ -11,7 +11,7 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/classForm" element={<CLassForm />} />
-      <Route path="/classForm" element={<Stream />} />
+      <Route path="/stream" element={<Stream />} />
     </Routes>
   );
 }
