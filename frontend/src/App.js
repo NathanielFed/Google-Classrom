@@ -1,10 +1,16 @@
 import './App.css';
-import CLassForm from './Components/ClassForm';
+import { Routes, Route } from 'react-router-dom';
+import Login from './Pages/Login';
+import Register from './Pages/Register';
 
 function App() {
   return (
-    <CLassForm />
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
   );
 }
 
 export default App;
+
