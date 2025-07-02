@@ -3,7 +3,7 @@ import "./Dashboard.css";
 
 const classes = [
   {
-    id: 2,
+    id: 1,
     title: "24-25 CSDC105.N1Am",
     section: "Mon-Sat 8-11am P217/CSLAB2",
     teacher: "ADNU Department of Computer...",
