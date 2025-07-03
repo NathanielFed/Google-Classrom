@@ -1,0 +1,80 @@
+.announcement-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.announcement-card.expanded {
+  cursor: default;
+}
+
+.announcement-prompt {
+  color: #5f6368;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.announcement-message-input {
+  width: 100%;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 1rem;
+  min-height: 80px;
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.announcement-message-input:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
+}
+
+.announcement-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.post-btn, .cancel-btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.post-btn {
+  background-color: #1a73e8;
+  color: #fff;
+  border: none;
+}
+
+.post-btn:disabled {
+  background-color: #c5d8f2;
+  cursor: not-allowed;
+}
+
+.post-btn:hover:not(:disabled) {
+  background-color: #176cdb;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  color: #176cdb;
+  border: 1px solid #dadce0;
+}
+
+.cancel-btn:hover {
+  background-color: #f8f9fa;
+}
