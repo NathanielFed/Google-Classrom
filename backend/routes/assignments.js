@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Assignment = require('../models/assignmentModel');
+const verifyToken = require('../middlewares/verifyToken');
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   const { title, instructions, deadline, classroomId } = req.body;
   const teacherId = req.user.id;
 
@@ -11,6 +12,7 @@ router.post('/', async (req, res) => {
       title,
       instructions,
       deadline,
+      classroomId,   
       teacher: teacherId,
     });
 
