@@ -5,6 +5,7 @@ const CreateAssignmentForm = () => {
     title: '',
     instructions: '',
     deadline: '',
+    classroomId: '',
   });
 
   const handleChange = (e) => {
@@ -18,7 +19,7 @@ const CreateAssignmentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('', {
+    fetch('http://localhost:5000/api/assignments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,10 +27,19 @@ const CreateAssignmentForm = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to create assignment');
+        return res.json();
+      })
       .then((data) => {
         console.log('Assignment created:', data);
         alert('Assignment created successfully');
+        setFormData({
+          title: '',
+          instructions: '',
+          deadline: '',
+          classroomId: '',
+        });
       })
       .catch((err) => {
         console.error('Error:', err);
@@ -37,8 +47,6 @@ const CreateAssignmentForm = () => {
       });
   };
 
-
-  
   const containerStyle = {
     maxWidth: '500px',
     margin: '50px auto',
@@ -108,6 +116,17 @@ const CreateAssignmentForm = () => {
             type="datetime-local"
             name="deadline"
             value={formData.deadline}
+            onChange={handleChange}
+            style={inputStyle}
+            required
+          />
+        </div>
+        <div>
+          <label style={labelStyle}>Classroom ID</label>
+          <input
+            type="text"
+            name="classroomId"
+            value={formData.classroomId}
             onChange={handleChange}
             style={inputStyle}
             required
