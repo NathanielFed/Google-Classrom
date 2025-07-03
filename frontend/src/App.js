@@ -8,6 +8,8 @@ import Stream from './Components/Stream';
 import CLassForm from './Components/ClassForm';
 import GradingForm from './Components/GradingForm';
 
+import CreateAssignmentForm from './Components/CreateAssignmentForm';
+
 function App() {
   return (
     <Routes>
@@ -15,7 +17,9 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/classForm" element={<CLassForm />} />
       <Route path="/stream" element={<Stream />} />
-      <Route path="/gradingForm" element={<GradingForm />} />
+      <Route path="/GradingForm" element={<GradingForm />} />
+      <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
+
     </Routes>
   );
 }
