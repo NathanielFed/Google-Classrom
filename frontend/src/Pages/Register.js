@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -18,8 +21,8 @@ function Register() {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      // Replace with real registration logic
       console.log("Registering:", { email, password });
+      navigate("/dashboard");
     }
   };
 
