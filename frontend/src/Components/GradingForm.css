@@ -1,0 +1,45 @@
+.grading-form {
+  width: 300px;
+  margin: 60px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-family: sans-serif;
+  background-color: #fefefe;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.grading-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.grading-form label {
+  font-weight: 600;
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.grading-form input,
+.grading-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.grading-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4a90e2;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.grading-form button:hover {
+  background-color: #357ab8;
+}

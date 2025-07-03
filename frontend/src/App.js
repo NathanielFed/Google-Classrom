@@ -20,6 +20,7 @@ function App() {
       <Route path="/GradingForm" element={<GradingForm />} />
       <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
 
+      <Route path="/gradingForm" element={<GradingForm />} />
     </Routes>
   );
 }
