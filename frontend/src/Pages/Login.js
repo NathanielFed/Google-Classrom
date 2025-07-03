@@ -1,13 +1,58 @@
-import { Link } from "react-router-dom";
 import React, { useState } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
+import jwtDecode from "jwt-decode";
+import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  // ✅ Submit user info to backend
+  const saveUserToDB = async (userData) => {
+    try {
+      await fetch("http://localhost:4000/api/users/login-or-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+    } catch (err) {
+      console.error("Error saving user:", err);
+    }
+  };
+
+  // ✅ Google Login
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        const profile = await res.json();
+
+        // Save to DB
+        await saveUserToDB({
+          email: profile.email,
+          name: profile.name,
+          picture: profile.picture,
+          loginType: "google",
+        });
+
+        navigate("/dashboard");
+      } catch (err) {
+        console.error("Google login failed", err);
+      }
+    },
+    onError: () => {
+      console.error("Login Failed");
+    },
+  });
+
+  // ✅ Manual login
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const currentErrors = {};
 
@@ -18,8 +63,14 @@ function Login() {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      // Replace this with actual login logic
-      console.log("Logging in with:", { email, password });
+      // Save to DB (simulated login)
+      await saveUserToDB({
+        email,
+        password,
+        loginType: "manual",
+      });
+
+      navigate("/dashboard");
     }
   };
 
@@ -59,7 +110,7 @@ function Login() {
           <div className="login-actions">
             <button className="login-btn" type="submit">Login</button>
             <span className="or-text">OR</span>
-            <button type="button" className="google-btn">
+            <button type="button" className="google-btn" onClick={() => login()}>
               <img src="/logo.png" alt="Google" />
               Login with Google
             </button>
