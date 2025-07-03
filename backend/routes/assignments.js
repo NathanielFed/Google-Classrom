@@ -12,7 +12,7 @@ router.post('/', verifyToken, async (req, res) => {
       title,
       instructions,
       deadline,
-      classroomId,   
+      classroomId,
       teacher: teacherId,
     });
 
