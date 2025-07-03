@@ -33,6 +33,7 @@ function App() {
       <Route path="/stream" element={<Stream />} />
       <Route path="/gradingForm" element={<GradingForm />} />
       <Route path="/dashboard" element={<Dashboard/>}/>
+      <Route path="/login" element={<Login />} />
      
       {/* Add more routes as needed */}
     </Routes>
