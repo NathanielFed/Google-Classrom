@@ -1,32 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./Navbar.css";
+import { FaBars, FaPlus, FaTh } from "react-icons/fa";
 
-const Navbar = () => {
+const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic }) => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("token");
+  const [showJoinTooltip, setShowJoinTooltip] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
-    <nav style={{ padding: "1rem", background: "#282c34", color: "white" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-        <Link to="/dashboard" style={{ color: "#61dafb" }}>Dashboard</Link>
-        <div style={{ display: "flex", gap: "1rem", marginLeft: "auto" }}>
-          {isAuthenticated ? (
-            <button onClick={handleLogout} style={{ background: "#61dafb", border: "none", padding: "0.5rem 1rem", cursor: "pointer" }}>Logout</button>
-          ) : (
-            <>
-              <Link to="/login" style={{ color: "#61dafb" }}>Login</Link>
-              <Link to="/register" style={{ color: "#61dafb" }}>Register</Link>
-            </>
-          )}
+    <nav className="navbar">
+      <div className="navbar-left">
+        <button className="navbar-hamburger" onClick={onToggleSidebar} aria-label="Toggle sidebar">
+          <FaBars />
+        </button>
+        <Link to="/dashboard" className="navbar-logo-link">
+          <img src="/classroom.png" alt="Google Classroom Logo" className="navbar-logo-img" />
+          <span className="navbar-logo-text">Classroom</span>
+        </Link>
+      </div>
+      <div className="navbar-right">
+        <div className="navbar-icon-group">
+          <div
+            className="navbar-plus-wrapper"
+            onMouseEnter={() => setShowJoinTooltip(true)}
+            onMouseLeave={() => setShowJoinTooltip(false)}
+          >
+            <button className="navbar-icon-btn" aria-label="Join class">
+              <FaPlus />
+            </button>
+            {showJoinTooltip && <span className="navbar-tooltip">Join class</span>}
+          </div>
+          <button className="navbar-icon-btn" aria-label="Google apps">
+            <FaTh className="navbar-waffle" />
+          </button>
+          <img
+            src={userProfilePic || "/logo.png"}
+            alt="Profile"
+            className="navbar-profile-pic"
+          />
         </div>
+        {isAuthenticated && (
+          <button className="navbar-link navbar-logout-btn" onClick={handleLogout}>Logout</button>
+        )}
       </div>
     </nav>
   );
-};
-
-const handleLogout = () => {
-  localStorage.removeItem("token");
-  navigate("/login");
 };
 
 export default Navbar;
