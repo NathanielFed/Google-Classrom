@@ -1,7 +1,7 @@
 import "./ClassForm.css";
 function CLassForm() {
     function getInput() {
-        let firstName = document.getElementById("className").value;
+        let className = document.getElementById("className").value;
         let section = document.getElementById("section").value;
         let subject = document.getElementById("subject").value;
         let room = document.getElementById("room").value;
