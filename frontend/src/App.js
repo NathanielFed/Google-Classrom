@@ -17,11 +17,9 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const userProfilePic = null;
 
-  // Placeholder for authentication state
   const isAuthenticated = false;
 
-  // Placeholder for user role: 'teacher' or 'student'
-  const userRole = 'student';  // replace with student to test student dashboard
+  const userRole = 'student'; 
 
   const handleToggleSidebar = () => {
     setSidebarCollapsed((prev) => !prev);
@@ -47,6 +45,7 @@ function App() {
             <Route path="/dashboard" element={userRole === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />} />
             <Route path="/classForm" element={<CLassForm />} />
             <Route path="/stream" element={<Stream />} />
+            <Route path="/CreateAssignmentForm" element={<CreateAssignmentForm />} />
             <Route path="/gradingForm" element={<GradingForm />} />
             
           </Routes>
