@@ -1,4 +1,4 @@
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 import express from "express";
 
 const router = express.Router();
@@ -28,4 +28,22 @@ router.post("/login-or-register", async (req, res) => {
   }
 });
 
-module.exports = router;
+router.get('/test-db', async (req, res) => {
+  try {
+    const users = await User.find().limit(1);
+    res.status(200).json({ success: true, message: 'Database is working', users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Database error', error });
+  }
+});
+
+router.get('/users', async (req, res) => {
+  try {
+    const users = await User.find().limit(1);
+    res.status(200).json({ success: true, message: 'Database is working', users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Database error', error });
+  }
+});
+
+export default router;
