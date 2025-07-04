@@ -5,12 +5,14 @@ import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
 import classRoutes from './routes/classRoutes.js';
 
+dotenv.config();
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb+srv://nfederis:NkUrwVUb6O2qYsDn@cluster0.buikpib.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB error:', err));
 
