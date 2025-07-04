@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Login from './Pages/Login';
 import Register from './Pages/Register';
@@ -11,6 +11,7 @@ import Sidebar from './Components/Sidebar';
 import React, { useState } from 'react';
 import GradingForm from './Components/GradingForm';
 
+import CreateAssignmentForm from './Components/CreateAssignmentForm';
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -24,20 +25,26 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-    <Routes>
+     <div className={`app-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+      {isAuthenticated && (
+        <>
+          <Navbar onToggleSidebar={handleToggleSidebar} isSidebarCollapsed={sidebarCollapsed} userProfilePic={userProfilePic} />
+          <Sidebar collapsed={sidebarCollapsed} />
+        </>
+      )}
+      <main className="main-content">
+        <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/classForm" element={<CLassForm />} />
       <Route path="/stream" element={<Stream />} />
       <Route path="/gradingForm" element={<GradingForm />} />
-      <Route path="/dashboard" element={<Dashboard/>}/>
-      <Route path="/login" element={<Login />} />
-     
-      {/* Add more routes as needed */}
+      <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
+
     </Routes>
-    </BrowserRouter>
+      </main>
+    </div>
   );
 }
 
