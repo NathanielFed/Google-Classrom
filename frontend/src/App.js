@@ -1,5 +1,6 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 import Login from './Pages/Login';
 import Register from './Pages/Register';
@@ -10,7 +11,6 @@ import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import React, { useState } from 'react';
 import GradingForm from './Components/GradingForm';
-import CreateAssignmentForm from './Components/CreateAssignmentForm';
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -47,12 +47,11 @@ function App() {
             <Route path="/classForm" element={<CLassForm />} />
             <Route path="/stream" element={<Stream />} />
             <Route path="/gradingForm" element={<GradingForm />} />
-            <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
+            
           </Routes>
         </div>
       </main>
     </div>
-  );
 }
 
 export default App;
