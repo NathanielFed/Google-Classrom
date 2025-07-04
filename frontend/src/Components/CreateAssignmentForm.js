@@ -18,7 +18,7 @@ const CreateAssignmentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('', {
+    fetch('http://localhost:5000/api/assignments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
