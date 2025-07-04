@@ -9,7 +9,7 @@ function CLassForm() {
         let subject = document.getElementById("subject").value;
         let room = document.getElementById("room").value;
 
-        fetch("http://localhost:5000/api/classes/create", {
+        fetch("http://localhost:4000/api/classes/create", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ teacherID, className, section, subject, room }),

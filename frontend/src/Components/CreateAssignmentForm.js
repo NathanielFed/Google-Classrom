@@ -19,11 +19,14 @@ const CreateAssignmentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:5000/api/assignments', {
+    const token = localStorage.getItem('token');
+    console.log('🪙 Sending token:', token);
+
+    fetch('http://localhost:4000/api/assignments', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(formData),
     })

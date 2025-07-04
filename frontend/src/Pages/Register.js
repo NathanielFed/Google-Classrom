@@ -1,8 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import "./Login.css";
-
-import { useNavigate } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
@@ -11,7 +9,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const currentErrors = {};
 
@@ -22,8 +20,22 @@ function Register() {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      console.log("Registering:", { email, password });
-      navigate("/dashboard");
+      try {
+        const res = await fetch("http://localhost:4000/api/users/login-or-register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, loginType: "manual" }),
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          localStorage.setItem("token", data.token);
+          navigate("/dashboard");
+        } else {
+          setErrors({ general: data.message || "Registration failed" });
+        }
+      } catch (err) {
+        setErrors({ general: "Network error" });
+      }
     }
   };
 
@@ -61,6 +73,8 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {errors.password && <p className="error-text">{errors.password}</p>}
+
+        {errors.general && <p className="error-text">{errors.general}</p>}
 
         <div className="login-actions">
           <button className="login-btn" type="submit">Sign Up</button>
