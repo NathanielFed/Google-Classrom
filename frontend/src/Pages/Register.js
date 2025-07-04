@@ -1,41 +1,50 @@
 import { Link } from "react-router-dom";
 import "./Login.css";
-function Register() {
 
+function Register() {
     return (
-        <div className="login-container">
-            <div className="login-header">
-                <img src="/logo.png" alt="Google Logo" className="g-logo" />
-                <div className="login-text">
-                    <strong>Sign Up</strong>
+        <div className="home-container">
+            <div className="home-header">
+                <div className="home-content">
+                    <h2 style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif', fontWeight: 500 }}>Sign Up</h2>
                     <span>Use your Google Account</span>
                 </div>
-            </div>
 
-            <div className="classroom-icon">
-                <img src="/classroom.png" alt="Google Classroom Icon" className="icon" />
-            </div>
+                <div className="classroom-icon">
+                    <div style={{ 
+                        width: '80px', 
+                        height: '80px', 
+                        borderRadius: '50%', 
+                        backgroundColor: '#4285F4',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '24px',
+                        fontWeight: 'bold'
+                    }}>G</div>
+                </div>
 
-            <h2>Google Classroom</h2>
+                <h2 style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif', fontWeight: 500 }}>Google Classroom</h2>
 
-            <form>
-                <input type="text" placeholder="Email" className="input-field" />
-                <input type="password" placeholder="Password" className="input-field" />
-            </form>
+                <form>
+                    <input type="text" placeholder="Email" className="input-field" />
+                    <input type="password" placeholder="Password" className="input-field" />
+                </form>
 
-            <div className="login-actions">
-                <button className="login-btn">Sign Up</button>
-                <span className="or-text">OR</span>
-                <button className="google-btn">
-                    <img src="/logo.png" alt="Google" />
-                    Sign up with Google
-                </button>
-            </div>
+                <div className="login-actions">
+                    <button className="login-btn">Sign Up</button>
+                    <span className="or-text">OR</span>
+                    <button className="google-btn">
+                        Sign up with Google
+                    </button>
+                </div>
 
-            <hr />
+                <hr />
 
-            <div className="signup-text">
-                Already have an account? <a href="/login">Login</a>
+                <div className="signup-text">
+                    Already have an account? <Link to="/login">Login</Link>
+                </div>
             </div>
         </div>
     );

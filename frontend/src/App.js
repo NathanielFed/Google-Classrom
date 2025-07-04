@@ -1,17 +1,15 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import React from 'react';
 
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import Dashboard from './Pages/Dashboard';
+import { TeacherDashboard, StudentDashboard } from './Pages/Dashboard';
 import Stream from './Components/Stream';
 import CLassForm from './Components/ClassForm';
 import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import React, { useState } from 'react';
 import GradingForm from './Components/GradingForm';
-
 import CreateAssignmentForm from './Components/CreateAssignmentForm';
 
 function App() {
@@ -21,29 +19,41 @@ function App() {
   // Placeholder for authentication state
   const isAuthenticated = false;
 
+  // Placeholder for user role: 'teacher' or 'student'
+  const userRole = 'student';  // replace with student to test student dashboard
+
   const handleToggleSidebar = () => {
     setSidebarCollapsed((prev) => !prev);
   };
 
+  const showNavAndSidebar = window.location.pathname === '/dashboard';
+
   return (
-     <div className={`app-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
-      {isAuthenticated && (
+    <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+      {showNavAndSidebar && (
         <>
           <Navbar onToggleSidebar={handleToggleSidebar} isSidebarCollapsed={sidebarCollapsed} userProfilePic={userProfilePic} />
-          <Sidebar collapsed={sidebarCollapsed} />
+          <div className="sidebar">
+            <Sidebar collapsed={sidebarCollapsed} />
+          </div>
         </>
       )}
-      <main className="main-content">
-        <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/classForm" element={<CLassForm />} />
-      <Route path="/stream" element={<Stream />} />
-      <Route path="/gradingForm" element={<GradingForm />} />
-      <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
-
-    </Routes>
+      <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+        <div className="content-wrapper">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={userRole === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />} />
+            <Route path="/classForm" element={<CLassForm />} />
+            <Route path="/stream" element={<Stream />} />
+            <Route path="/gradingForm" element={<GradingForm />} />
+            <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/enrolled" element={<EnrolledClasses />} />
+            <Route path="/archived" element={<ArchivedClasses />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </div>
       </main>
     </div>
   );

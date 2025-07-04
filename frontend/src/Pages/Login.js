@@ -7,17 +7,27 @@ function Login() {
     return (
         <div className="home-container">
             <div className="home-header">
-                <img src="/logo.png" alt="Logo" className="logo" />
                 <div className="home-content">
-                    Login <br /> <span>Use your Google Account</span>
+                    <h2 style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif', fontWeight: 500 }}>Login</h2>
+                    <span>Use your Google Account</span>
                 </div>
-
 
                 <div className="classroom-icon">
-                    <img src="/classroom.png" alt="Google Classroom Icon" className="icon" />
+                    <div style={{ 
+                        width: '80px', 
+                        height: '80px', 
+                        borderRadius: '50%', 
+                        backgroundColor: '#4285F4',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '24px',
+                        fontWeight: 'bold'
+                    }}>G</div>
                 </div>
 
-                <h2 id="login-title">Google Classroom</h2>
+                <h2 id="login-title" style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif', fontWeight: 500 }}>Google Classroom</h2>
 
                 <form>
                     <input type="text" placeholder="Email" className="input-field" />
@@ -28,7 +38,6 @@ function Login() {
                     <button className="login-btn">Login</button>
                     <span className="or-text">OR</span>
                     <button className="google-btn">
-                        <img src="/logo.png" alt="Google" />
                         Login with Google
                     </button>
                 </div>
