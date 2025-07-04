@@ -1,20 +1,26 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const classSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  accessToken: {
-    type: String
-  }
+    className: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    section: {
+        type: String,
+        trim: true,
+    },
+    subject: {
+        type: String,
+        trim: true,
+    },
+    room: {
+        type: String,
+        trim: true,
+    }
 }, {
-  timestamps: true
+    _id: true,
+    timestamps: true
 });
 
-module.exports = mongoose.model('Class', classSchema);
+module.exports = mongoose.model("Class", classSchema);
