@@ -9,9 +9,7 @@ const Sidebar = ({ collapsed }) => {
   );
   return (
     <aside className={`sidebar${collapsed ? ' sidebar-collapsed' : ''}`}>
-      <div className="sidebar-logo-container">
-        <img src="/classroom.png" alt="Google Classroom Logo" className="sidebar-logo" />
-      </div>
+      {/* Removed sidebar-logo-container and logo image */}
       <nav className="sidebar-nav">
         <Link to="/dashboard" className="sidebar-btn active">
           <FaHome className="sidebar-icon" />

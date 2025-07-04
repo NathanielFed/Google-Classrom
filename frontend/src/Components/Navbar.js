@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import { FaBars, FaPlus, FaTh } from "react-icons/fa";
+import { FaBars, FaPlus, FaTh, FaUserCircle } from "react-icons/fa";
 
 const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic }) => {
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic }) => {
           <FaBars />
         </button>
         <Link to="/dashboard" className="navbar-logo-link">
-          <img src="/classroom.png" alt="Google Classroom Logo" className="navbar-logo-img" />
-          <span className="navbar-logo-text">Classroom</span>
+          <img src="/classroom.png" alt="Google Classroom Logo" className="navbar-logo-img" style={{ height: 36, marginRight: 10 }} />
+          <span className="navbar-logo-text" style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif', fontWeight: 500, fontSize: '1.25rem' }}>Classroom</span>
         </Link>
       </div>
       <div className="navbar-right">
@@ -39,11 +39,15 @@ const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic }) => {
           <button className="navbar-icon-btn" aria-label="Google apps">
             <FaTh className="navbar-waffle" />
           </button>
-          <img
-            src={userProfilePic || "/logo.png"}
-            alt="Profile"
-            className="navbar-profile-pic"
-          />
+          {userProfilePic ? (
+            <img
+              src={userProfilePic}
+              alt="Profile"
+              className="navbar-profile-pic"
+            />
+          ) : (
+            <FaUserCircle className="navbar-profile-pic" style={{ fontSize: 32, color: '#888' }} />
+          )}
         </div>
         {isAuthenticated && (
           <button className="navbar-link navbar-logout-btn" onClick={handleLogout}>Logout</button>
