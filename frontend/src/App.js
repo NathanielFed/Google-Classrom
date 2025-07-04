@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import React from 'react';
 
 import Login from './Pages/Login';
@@ -12,6 +12,7 @@ import CreateAssignmentForm from './Components/CreateAssignmentForm';
 
 function App() {
   return (
+    <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -21,6 +22,7 @@ function App() {
       <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
 
     </Routes>
+    </BrowserRouter>
   );
 }
 

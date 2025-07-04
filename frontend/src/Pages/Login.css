@@ -62,7 +62,7 @@
 }
 
 .classroom-icon img {
-  width: 95px;
+  width: 36px;
   border-radius: 5px;
 }
 .login-title {
@@ -133,3 +133,8 @@ form input {
   text-decoration: none;
 }
 
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+  margin: 5px 0 10px;
+}
