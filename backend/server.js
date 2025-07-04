@@ -4,11 +4,17 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
 import classRoutes from './routes/classRoutes.js';
+import assignmentRoutes from './routes/assignments.js';
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // MongoDB Connection
@@ -16,11 +22,11 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB error:', err));
 
-// API Routes
+// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/classes', classRoutes);
+app.use('/api/assignments', assignmentRoutes); 
 
-
-// Port and Server Start
-const PORT = process.env.PORT || 5000;
+// Server start
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

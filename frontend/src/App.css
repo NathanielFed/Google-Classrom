@@ -1,0 +1,38 @@
+.app-main-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.sidebar {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  bottom: 0;
+  z-index: 90;
+}
+
+.main-content {
+  margin-left: 260px;
+  margin-top: 56px;
+  padding: 24px;
+  flex: 1;
+  transition: margin-left 0.2s;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 64px;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
