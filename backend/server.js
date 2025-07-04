@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
+import classRoutes from './routes/classRoutes.js';
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,8 @@ mongoose.connect('mongodb+srv://nfederis:NkUrwVUb6O2qYsDn@cluster0.buikpib.mongo
 
 // API Routes
 app.use('/api/users', userRoutes);
+app.use('/api/classes', classRoutes);
+
 
 // Port and Server Start
 const PORT = process.env.PORT || 5000;
