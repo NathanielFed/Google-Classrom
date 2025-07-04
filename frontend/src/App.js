@@ -48,10 +48,6 @@ function App() {
             <Route path="/stream" element={<Stream />} />
             <Route path="/gradingForm" element={<GradingForm />} />
             <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/enrolled" element={<EnrolledClasses />} />
-            <Route path="/archived" element={<ArchivedClasses />} />
-            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </main>
