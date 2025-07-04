@@ -1,18 +1,15 @@
-// Keep CommonJS require
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-
-// New: import userRoutes via ES module compatibility
-const mongoose = require('mongoose');
-const userRoutes = require('./routes/userRoutes');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/classroomDB')
+mongoose.connect('mongodb+srv://nfederis:NkUrwVUb6O2qYsDn@cluster0.buikpib.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB error:', err));
 
