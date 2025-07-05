@@ -10,6 +10,7 @@ import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import React, { useState } from 'react';
 import GradingForm from './Components/GradingForm';
+import JoinClass from './Components/JoinClass';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
       <Route path="/gradingForm" element={<GradingForm />} />
       <Route path="/dashboard" element={<Dashboard/>}/>
       <Route path="/login" element={<Login />} />
+      <Route path="/joinClass" element={<JoinClass />} />
      
       {/* Add more routes as needed */}
     </Routes>

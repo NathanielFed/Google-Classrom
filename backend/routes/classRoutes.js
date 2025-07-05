@@ -15,4 +15,15 @@ router.post('/create', async (req, res) => {
   }
 });
 
+
+router.post('/join', async (req, res) => {
+  const { classCode } = req.body;
+  try {
+    console.log("JOINED " + classCode);
+    //add the classroom id to the user
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 export default router;

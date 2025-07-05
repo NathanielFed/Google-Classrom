@@ -16,6 +16,7 @@ function CLassForm() {
         })
         .then(res => res.json())
         .then(data => {
+            
             if (data.success) alert("Class saved!");
             else alert("Error: " + data.error);
         })
