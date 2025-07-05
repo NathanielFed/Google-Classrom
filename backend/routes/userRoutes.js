@@ -3,8 +3,30 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/login-or-register", async (req, res) => {
-  const { email, name, picture, password, loginType } = req.body;
+router.post("/login", async (req, res) => {
+  const { email, password} = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+
+    // If user doesn't exist, create it
+    if (!user) {
+      user = new User({
+        email,
+        password: password || "",
+      });
+      await user.save();
+    }
+
+    res.status(200).json({ message: "User login success", user });
+  } catch (err) {
+    console.error("DB error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.post("/register", async (req, res) => {
+  const { email, name, password, userType } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -14,14 +36,13 @@ router.post("/login-or-register", async (req, res) => {
       user = new User({
         email,
         name: name || email.split("@")[0],
-        picture: picture || "",
         password: password || "",
         loginType,
       });
       await user.save();
     }
 
-    res.status(200).json({ message: "User login/register success", user });
+    res.status(200).json({ message: "User register success", user });
   } catch (err) {
     console.error("DB error:", err);
     res.status(500).json({ error: "Server error" });
