@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
 import classRoutes from './routes/classRoutes.js';
+import postRoutes from './routes/posts.js'
 
 dotenv.config();
 
