@@ -22,7 +22,7 @@ function Register() {
 
     if (Object.keys(currentErrors).length === 0) {
       console.log("Registering:", { email, password });
-      navigate("/dashboard");
+      navigate("/login");
     }
   };
 
