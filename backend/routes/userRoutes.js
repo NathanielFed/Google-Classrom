@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import express from "express";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -40,22 +41,22 @@ router.post("/register", async (req, res) => {
         loginType,
       });
       await user.save();
+    } else {
     }
 
-    res.status(200).json({ message: "User register success", user });
+    // Generate JWT
+    const token = jwt.sign(
+      { id: user._id, email: user.email, name: user.name },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).json({ message: "User login/register success", user, token });
   } catch (err) {
     console.error("DB error:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
-router.get('/test-db', async (req, res) => {
-  try {
-    const users = await User.find().limit(1);
-    res.status(200).json({ success: true, message: 'Database is working', users });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Database error', error });
-  }
-});
 
 export default router;

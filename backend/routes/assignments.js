@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const Assignment = require('../models/assignmentModel');
-const verifyToken = require('../middlewares/verifyToken');
+import Assignment from '../models/assignmentModel.js';
+import verifyToken from '../middleware/verifyToken.js';
 
 router.post('/', verifyToken, async (req, res) => {
   const { title, instructions, deadline, classroomId } = req.body;
@@ -12,7 +12,7 @@ router.post('/', verifyToken, async (req, res) => {
       title,
       instructions,
       deadline,
-      classroomId,   
+      classroomId,
       teacher: teacherId,
     });
 
@@ -24,4 +24,17 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+router.get('/classroom/:classroomId', async (req, res) => {
+  const { classroomId } = req.params;
+
+  try {
+    const assignments = await Assignment.find({ classroomId });
+
+    res.status(200).json(assignments);
+  } catch (err) {
+    console.error('Error fetching assignments:', err);
+    res.status(500).json({ error: 'Failed to fetch assignments' });
+  }
+});
+
+export default router;
