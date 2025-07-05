@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // API Routes
 app.use('/api/users', userRoutes);
 app.use('/api/classes', classRoutes);
-
+app.use('/api/posts', postRoutes);
 
 // Port and Server Start
 const PORT = process.env.PORT || 5000;
