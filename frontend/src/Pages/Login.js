@@ -14,11 +14,22 @@ function Login() {
   // ✅ Submit user info to backend
   const saveUserToDB = async (userData) => {
     try {
-      await fetch("http://localhost:4000/api/users/login-or-register", {
+      const res = await fetch("http://localhost:5000/api/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
+
+      const data = await res.json();
+
+      if (data.token) {
+        localStorage.setItem("token", data.token); // ✅ Store token
+        console.log("JWT token stored in localStorage");
+      } else {
+        console.warn("No token received from server");
+      }
+
+      return data;
     } catch (err) {
       console.error("Error saving user:", err);
     }
@@ -63,14 +74,15 @@ function Login() {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      // Save to DB (simulated login)
-      await saveUserToDB({
+      const data = await saveUserToDB({
         email,
         password,
         loginType: "manual",
       });
 
-      navigate("/dashboard");
+      if (data?.token) {
+        navigate("/dashboard");
+      }
     }
   };
 
