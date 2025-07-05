@@ -10,13 +10,13 @@
   font-weight: 500;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   font-family:"Google Sans", Roboto, Arial, sans-serif;
+  color: #3C4043;
   
 }
 
 .join-class .join-class-title {
     font-size: 18px;
     padding: 13px 24px;
-
 }
 
 .join-class .button {
@@ -50,7 +50,6 @@
     
 }
 .join-class-class-code {
-    margin: 20px;
     padding: 25px;
     border: 1px solid #ccc;
     border-radius: 15px;
@@ -65,5 +64,11 @@
     border: 1px solid black;
 }
 .join-class  h3 {
+    font-weight: 500;
+}
+
+.join-class-description {
+    padding: 25px;
+    font-size: 18px;
     font-weight: 500;
 }
