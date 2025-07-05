@@ -1,9 +1,10 @@
 import './App.css';
+
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import Dashboard from './Pages/Dashboard';
+import { TeacherDashboard, StudentDashboard } from './Pages/Dashboard';
 import Stream from './Components/Stream';
 import CLassForm from './Components/ClassForm';
 import Navbar from './Components/Navbar';
@@ -20,28 +21,41 @@ function App() {
   // Placeholder for authentication state
   const isAuthenticated = false;
 
+  // Placeholder for user role: 'teacher' or 'student'
+  const userRole = 'student';  // replace with student to test student dashboard
+
   const handleToggleSidebar = () => {
     setSidebarCollapsed((prev) => !prev);
   };
 
+  const showNavAndSidebar = window.location.pathname === '/dashboard';
+
   return (
-    <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/classForm" element={<CLassForm />} />
-      <Route path="/stream" element={<Stream />} />
-      <Route path="/gradingForm" element={<GradingForm />} />
-      <Route path="/dashboard" element={<Dashboard/>}/>
-      <Route path="/login" element={<Login />} />
-      <Route path="/joinClass" element={<JoinClass />} />
+    <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+      {showNavAndSidebar && (
+        <>
+          <Navbar onToggleSidebar={handleToggleSidebar} isSidebarCollapsed={sidebarCollapsed} userProfilePic={userProfilePic} />
+          <div className="sidebar">
+            <Sidebar collapsed={sidebarCollapsed} />
+          </div>
+        </>
+      )}
+      <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+        <div className="content-wrapper">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={userRole === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />} />
+            <Route path="/classForm" element={<CLassForm />} />
+            <Route path="/stream" element={<Stream />} />
+            <Route path="/gradingForm" element={<GradingForm />} />
+             <Route path="/joinClass" element={<JoinClass />} />
      
-      {/* Add more routes as needed */}
-    </Routes>
-    </BrowserRouter>
-  );
-}
+          </Routes>
+        </div>
+      </main>
+    </div>
+)}
 
 export default App;
 
