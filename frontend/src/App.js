@@ -10,7 +10,7 @@ import CLassForm from './Components/ClassForm';
 import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import GradingForm from './Components/GradingForm';
-import JoinClass from './Components/JoinClass';
+import JoinClass from './Components/JoinClass'
 
 import CreateAssignmentForm from './Components/CreateAssignmentForm';
 

@@ -13,7 +13,7 @@ function Login() {
   // Submit user info to backend and get JWT
   const saveUserToDB = async (userData) => {
     try {
-      const res = await fetch("http://localhost:4000/api/users/login-or-register", {
+      const res = await fetch("http://localhost:5000/api/users/login-or-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
