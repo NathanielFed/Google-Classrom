@@ -28,7 +28,6 @@ function App() {
   const showNavAndSidebar = window.location.pathname.startsWith('/dashboard');
 
   return (
-    <BrowserRouter>
       <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
         {showNavAndSidebar && (
           <>
@@ -61,7 +60,6 @@ function App() {
           </div>
         </main>
       </div>
-    </BrowserRouter>
   );
 }
 
