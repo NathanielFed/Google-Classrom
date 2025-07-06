@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
 import classRoutes from './routes/classRoutes.js';
+import postRoutes from './routes/posts.js'
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // API Routes
 app.use('/api/users', userRoutes);
 app.use('/api/classes', classRoutes);
+app.use('/api/posts', postRoutes);
 
 
 // Port and Server Start

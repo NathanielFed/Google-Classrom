@@ -10,14 +10,16 @@ import CLassForm from './Components/ClassForm';
 import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import GradingForm from './Components/GradingForm';
+import JoinClass from './Components/JoinClass';
+
 import CreateAssignmentForm from './Components/CreateAssignmentForm';
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const userProfilePic = null;
 
-  const isAuthenticated = false; 
-  const userRole = 'student';    
+  const isAuthenticated = false;
+  const userRole = 'student';
 
   const handleToggleSidebar = () => {
     setSidebarCollapsed((prev) => !prev);
@@ -53,6 +55,7 @@ function App() {
               <Route path="/classForm" element={<CLassForm />} />
               <Route path="/stream" element={<Stream />} />
               <Route path="/gradingForm" element={<GradingForm />} />
+              <Route path="/joinClass" element={<JoinClass />} />
               <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
             </Routes>
           </div>
