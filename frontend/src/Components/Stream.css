@@ -78,3 +78,21 @@
 .cancel-btn:hover {
   background-color: #f8f9fa;
 }
+
+.comments-section {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid #eee;
+  font-size: 0.9rem;
+}
+
+.comment-input {
+  margin-top: 0.5rem;
+  padding: 5px;
+  width: 70%;
+}
+
+.comment-btn {
+  margin-left: 0.5rem;
+  padding: 5px 10px;
+}

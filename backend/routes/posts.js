@@ -1,30 +1,97 @@
-const express = require('express');
+import express from 'express';
+import Post from '../models/postModel.js';
 const router = express.Router();
-const Post = require('../models/postModel');
 
-// TEMP test values
-const TEST_CLASS_ID = '686683e379f1cbee44feed3c'; // Use your class _id from MongoDB
-
+// ✅ Create a post
 router.post('/', async (req, res) => {
+  const { message, userName, classId } = req.body;
+
+  if (!message || !userName || !classId) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
   try {
-    const { message, userName } = req.body;
-
-    if (!message || !userName) {
-      return res.status(400).json({ error: 'Message and userName are required.' });
-    }
-
-    const post = new Post({
-      message,
-      userName,
-      classId: TEST_CLASS_ID,
-    });
-
-    await post.save();
-    res.status(201).json(post);
+    const newPost = new Post({ message, userName, classId });
+    await newPost.save();
+    res.status(201).json(newPost);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to save post.' });
+    console.error('Error creating post:', err);
+    res.status(500).json({ error: 'Failed to create post' });
   }
 });
 
-module.exports = router;
+// ✅ Get all posts for a specific class
+router.get('/class/:classId', async (req, res) => {
+  try {
+    const posts = await Post.find({ classId: req.params.classId }).sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
+});
+
+// ✅ Update a post by ID
+router.put('/:id', async (req, res) => {
+  const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required' });
+  }
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      { message },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    res.json(updatedPost);
+  } catch (err) {
+    console.error('Error updating post:', err);
+    res.status(500).json({ error: 'Failed to update post' });
+  }
+});
+
+// ✅ Delete a post by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const deleted = await Post.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting post:', err);
+    res.status(500).json({ error: 'Failed to delete post' });
+  }
+});
+
+// POST /api/posts/:postId/comments
+router.post('/:postId/comments', async (req, res) => {
+  const { message, userName } = req.body;
+
+  if (!message || !userName) {
+    return res.status(400).json({ error: 'Missing comment fields' });
+  }
+
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ error: 'Post not found' });
+
+    const comment = { message, userName, createdAt: new Date() }; // ✅ Add createdAt here
+    post.comments.push(comment);
+    await post.save();
+
+    res.status(201).json(comment); // This now includes createdAt
+  } catch (err) {
+    console.error('Error adding comment:', err);
+    res.status(500).json({ error: 'Failed to add comment' });
+  }
+});
+
+export default router;
