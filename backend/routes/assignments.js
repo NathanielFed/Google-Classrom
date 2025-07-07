@@ -1,27 +1,17 @@
-  const express = require('express');
-  const router = express.Router();
-  const Assignment = require('../models/assignmentModel');
-  const verifyToken = require('../middleware/verifyToken');
+router.get('/:classroomId', async (req, res) => {
+  const { classroomId } = req.params;
 
-  router.post('/', verifyToken, async (req, res) => {
-    const { title, instructions, deadline, classroomId } = req.body;
-    const teacherId = req.user.id;
+  try {
+    const now = new Date();
 
-    try {
-      const newAssignment = new Assignment({
-        title,
-        instructions,
-        deadline,
-        classroomId,
-        teacher: teacherId,
-      });
+    const assignments = await Assignment.find({
+      classroomId,
+      deadline: { $gte: now },
+    }).sort({ deadline: 1 });
 
-      const saved = await newAssignment.save();
-      res.status(201).json(saved);
-    } catch (err) {
-      console.error('Error saving assignment:', err);
-      res.status(500).json({ error: 'Failed to save assignment' });
-    }
-  });
-
-  module.exports = router;
+    res.status(200).json(assignments);
+  } catch (err) {
+    console.error('Error fetching assignments:', err);
+    res.status(500).json({ error: 'Failed to fetch assignments' });
+  }
+});

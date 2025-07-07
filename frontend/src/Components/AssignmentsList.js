@@ -7,32 +7,38 @@ const AssignmentsList = ({ classroomId }) => {
   useEffect(() => {
     if (!classroomId) return;
 
-    fetch(`http://localhost:5000/api/assignments/classroom/${classroomId}`)
-      .then(res => res.json())
-      .then(data => {
+    const fetchAssignments = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/assignments/${classroomId}`);
+        const data = await res.json();
         setAssignments(data);
+      } catch (err) {
+        console.error('Failed to fetch assignments', err);
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error loading assignments:', err);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchAssignments();
   }, [classroomId]);
 
   if (loading) return <p>Loading assignments...</p>;
-  if (assignments.length === 0) return <p>No assignments available.</p>;
 
   return (
     <div>
-      <h3>Assignments</h3>
-      <ul>
-        {assignments.map((a) => (
-          <li key={a._id}>
-            <strong>{a.title}</strong> — Due: {new Date(a.deadline).toLocaleString()}
-            <p>{a.instructions}</p>
-          </li>
-        ))}
-      </ul>
+      <h2>Assignments</h2>
+      {assignments.length === 0 ? (
+        <p>No assignments yet.</p>
+      ) : (
+        <ul>
+          {assignments.map((assignment) => (
+            <li key={assignment._id}>
+              <strong>{assignment.title}</strong> – due {new Date(assignment.deadline).toLocaleString()}
+              <p>{assignment.instructions}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
