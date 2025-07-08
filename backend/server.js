@@ -1,29 +1,73 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const userRoutes = require('./routes/userRoutes');
-const classRoutes = require('./routes/classRoutes');
-const postRoutes = require('./routes/posts');
-const assignments = require('./routes/assignments');
+require('dotenv').config();
+console.log('🚀 Starting server...');
 
-dotenv.config();
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
-app.use(cors());
+const PORT = 4000;
+
+// ✅ Middleware (CORS, JSON)
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true
+}));
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB error:', err));
+// ✅ Multer storage config
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+});
+const upload = multer({ storage });
 
-// API Routes
-app.use('/api/users', userRoutes);
-app.use('/api/classes', classRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/assignments', assignments);
+// ✅ Path to JSON metadata
+const metadataFile = path.join(__dirname, 'data', 'files.json');
 
-// Port and Server Start
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// ✅ Upload route
+app.post('/upload', upload.single('file'), async (req, res) => {
+  console.log('📥 File received:', req.file);
+
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  const newFile = {
+    filename: req.file.filename,
+    path: req.file.path,
+    url: `http://localhost:${PORT}/uploads/${req.file.filename}`,
+    userId: req.body.userId || 'temp-user',
+    assignmentId: req.body.assignmentId || 'temp-assignment',
+    uploadedAt: new Date().toISOString()
+  };
+
+  try {
+    let existing = [];
+    if (fs.existsSync(metadataFile)) {
+      const raw = fs.readFileSync(metadataFile);
+      existing = JSON.parse(raw);
+    }
+
+    existing.push(newFile);
+    fs.writeFileSync(metadataFile, JSON.stringify(existing, null, 2));
+
+    res.status(200).json({
+      message: 'File uploaded and metadata saved (JSON)',
+      file: newFile
+    });
+  } catch (err) {
+    console.error('❌ Error saving metadata:', err);
+    res.status(500).json({ message: 'Upload failed', error: err.message });
+  }
+});
+
+// ✅ Start server
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
+});

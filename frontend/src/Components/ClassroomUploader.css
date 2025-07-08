@@ -1,0 +1,112 @@
+/* Container background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(32, 33, 36, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  /* Modal box */
+  .upload-modal {
+    background: white;
+    width: 600px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.3);
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Header */
+  .modal-header {
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Tabs */
+  .tab-bar {
+    display: flex;
+    padding: 0 16px;
+    margin-top: 12px;
+    gap: 16px;
+  }
+  
+  .tab {
+    font-size: 13px;
+    padding-bottom: 6px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  .tab.active {
+    color: #1a73e8;
+    border-bottom: 2px solid #1a73e8;
+  }
+  
+  /* Upload area */
+  .upload-area {
+    border: 2px dashed #c2c2c2;
+    margin: 16px;
+    padding: 40px;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .text {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .browse-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  /* Footer buttons */
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    gap: 10px;
+    border-top: 1px solid #eee;
+  }
+  
+  .cancel-btn {
+    background: none;
+    border: none;
+    color: #1a73e8;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .upload-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .upload-btn:disabled {
+    background: #c7dafb;
+    cursor: not-allowed;
+  }
