@@ -1,11 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const userRoutes = require('./routes/userRoutes');
-const classRoutes = require('./routes/classRoutes');
-const postRoutes = require('./routes/posts');
-const assignments = require('./routes/assignments');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import userRoutes from './routes/userRoutes.js';
+import classRoutes from './routes/classRoutes.js';
+import postRoutes from './routes/posts.js';
+import assignments from './routes/assignments.js';
+
 
 dotenv.config();
 

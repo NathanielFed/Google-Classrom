@@ -1,3 +1,8 @@
+import express from 'express';
+import Assignment from '../models/assignmentModel.js';
+
+const router = express.Router();
+
 router.get('/:classroomId', async (req, res) => {
   const { classroomId } = req.params;
 
@@ -15,3 +20,5 @@ router.get('/:classroomId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch assignments' });
   }
 });
+
+export default router;
