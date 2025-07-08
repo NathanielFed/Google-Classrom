@@ -7,9 +7,18 @@ const Stream = ({ classId }) => {
   const [posts, setPosts] = useState([]);
   const [editId, setEditId] = useState(null);
   const [editMessage, setEditMessage] = useState('');
+  const [sortOrder, setSortOrder] = useState('desc');
 
   const TEMP_USER_NAME = 'Test User';      // for posts
   const TEMP_COMMENTER = 'Test Student';   // for comments
+
+  const sortPosts = (unsortedPosts, order = sortOrder) => {
+    return [...unsortedPosts].sort((a, b) =>
+      order === 'asc'
+        ? new Date(a.createdAt) - new Date(b.createdAt)
+        : new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  };
 
   useEffect(() => {
     if (!classId) return;
@@ -18,7 +27,7 @@ const Stream = ({ classId }) => {
       try {
         const res = await fetch(`http://localhost:5000/api/posts/class/${classId}`);
         const data = await res.json();
-        setPosts(data);
+        setPosts(sortPosts(data));
       } catch (err) {
         console.error('Error loading posts:', err);
       }
@@ -26,6 +35,10 @@ const Stream = ({ classId }) => {
 
     fetchPosts();
   }, [classId]);
+
+  useEffect(() => {
+    setPosts((prev) => sortPosts(prev, sortOrder));
+  }, [sortOrder]);
 
   const post = async () => {
     if (!message.trim()) return;
@@ -44,7 +57,7 @@ const Stream = ({ classId }) => {
       if (!res.ok) throw new Error('Failed to post announcement');
       const newPost = await res.json();
 
-      setPosts((prev) => [newPost, ...prev]);
+      setPosts((prev) => sortPosts([newPost, ...prev]));
       setMessage('');
       setIsExpanded(false);
     } catch (err) {
@@ -73,7 +86,9 @@ const Stream = ({ classId }) => {
       if (!res.ok) throw new Error('Failed to update post');
       const updated = await res.json();
 
-      setPosts((prev) => prev.map((p) => (p._id === postId ? updated : p)));
+      setPosts((prev) =>
+        sortPosts(prev.map((p) => (p._id === postId ? updated : p)))
+      );
       setEditId(null);
       setEditMessage('');
     } catch (err) {
@@ -88,7 +103,7 @@ const Stream = ({ classId }) => {
       });
 
       if (!res.ok) throw new Error('Failed to delete post');
-      setPosts((prev) => prev.filter((p) => p._id !== postId));
+      setPosts((prev) => sortPosts(prev.filter((p) => p._id !== postId)));
     } catch (err) {
       console.error('Error deleting post:', err);
     }
@@ -110,7 +125,9 @@ const Stream = ({ classId }) => {
 
       setPosts((prev) =>
         prev.map((p) =>
-          p._id === postId ? { ...p, comments: [...(p.comments || []), newComment] } : p
+          p._id === postId
+            ? { ...p, comments: [...(p.comments || []), newComment] }
+            : p
         )
       );
       inputRef.value = '';
@@ -142,6 +159,15 @@ const Stream = ({ classId }) => {
             </div>
           </>
         )}
+      </div>
+
+      {/* Sorting dropdown */}
+      <div className="sort-dropdown">
+        <label>Sort by: </label>
+        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="desc">Newest first</option>
+          <option value="asc">Oldest first</option>
+        </select>
       </div>
 
       {/* Posts List */}
@@ -186,7 +212,7 @@ const Stream = ({ classId }) => {
                   <li key={idx}>
                     <strong>{c.userName}</strong>: {c.message}
                     <br />
-                    <small>{new Date(c.createdAt).toLocaleString()}</small>
+                    <small>{c.createdAt ? new Date(c.createdAt).toLocaleString() : 'Just now'}</small>
                   </li>
                 ))}
               </ul>

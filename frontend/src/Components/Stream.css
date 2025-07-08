@@ -96,3 +96,8 @@
   margin-left: 0.5rem;
   padding: 5px 10px;
 }
+
+.sort-dropdown {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
