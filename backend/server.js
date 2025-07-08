@@ -4,22 +4,22 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
 import classRoutes from './routes/classRoutes.js';
-<<<<<<< HEAD
 import assignmentRoutes from './routes/assignments.js';
-=======
-import postRoutes from './routes/posts.js'
->>>>>>> 5b8030b4eff920b5fb12fdd188c63b8004ccdd25
+import postRoutes from './routes/posts.js' 
+
 
 dotenv.config();
 
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:4001', 'http://localhost:3000'],
   credentials: true,
 }));
 
-app.use(express.json());
+
+app.use(express.json()); // Middleware to parse JSON bodies
+
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -29,11 +29,8 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/classes', classRoutes);
-<<<<<<< HEAD
 app.use('/api/assignments', assignmentRoutes); 
-=======
 app.use('/api/posts', postRoutes);
->>>>>>> 5b8030b4eff920b5fb12fdd188c63b8004ccdd25
 
 // Server start
 const PORT = process.env.PORT || 4000;

@@ -5,6 +5,9 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
+
+  console.log("Rendering Login component"); 
+
   const navigate = useNavigate();
 
 
@@ -12,10 +15,10 @@ function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  // ✅ Submit user info to backend
+  // Submit user info to backend
   const saveUserToDB = async (userData) => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/register", {
+      const res = await fetch("http://localhost:4000/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -24,7 +27,7 @@ function Login() {
       const data = await res.json();
 
       if (data.token) {
-        localStorage.setItem("token", data.token); // ✅ Store token
+        localStorage.setItem("token", data.token); // Store token
         console.log("JWT token stored in localStorage");
       } else {
         console.warn("No token received from server");
@@ -36,7 +39,7 @@ function Login() {
     }
   };
 
-  // ✅ Google Login
+  // Google Login
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -63,29 +66,45 @@ function Login() {
     },
   });
 
-  // ✅ Manual login
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const currentErrors = {};
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const currentErrors = {};
 
-    if (!email.trim()) currentErrors.email = "Email is required.";
-    if (!password) currentErrors.password = "Password is required.";
-    else if (password.length < 6) currentErrors.password = "Password must be at least 6 characters.";
+  if (!email.trim()) currentErrors.email = "Email is required.";
+  if (!password) currentErrors.password = "Password is required.";
+  else if (password.length < 6) currentErrors.password = "Password must be at least 6 characters.";
 
-    setErrors(currentErrors);
+  setErrors(currentErrors);
 
-    if (Object.keys(currentErrors).length === 0) {
-      const data = await saveUserToDB({
-        email,
-        password,
-        loginType: "manual",
+  if (Object.keys(currentErrors).length === 0) {
+    try {
+      const res = await fetch("http://localhost:4000/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
-      if (data?.token) {
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Create an account first.");
+        return;
+      }
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
         navigate("/dashboard");
       }
+    } catch (error) {
+      console.error("Login failed:", error); // shows full error
+      alert("Something went wrong: " + error.message); // shows message in browser
     }
-  };
+  }
+};
+
 
   return (
     <div className="home-container">

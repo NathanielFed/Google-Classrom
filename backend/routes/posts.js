@@ -1,6 +1,8 @@
-const express = require('express');
+import express from 'express';
+import postModel from '../models/postModel.js';
+
 const router = express.Router();
-const Post = require('../models/postModel');
+const Post = postModel;
 
 // TEMP test values
 const TEST_CLASS_ID = '686683e379f1cbee44feed3c'; // Use your class _id from MongoDB
@@ -27,4 +29,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

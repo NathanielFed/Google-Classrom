@@ -7,14 +7,16 @@ import { useNavigate } from "react-router-dom";
 function Register() {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const currentErrors = {};
 
+    if (!name.trim()) currentErrors.name = "Name is required.";
     if (!email.trim()) currentErrors.email = "Email is required.";
     if (!password) currentErrors.password = "Password is required.";
     else if (password.length < 6) currentErrors.password = "Password must be at least 6 characters.";
@@ -22,8 +24,24 @@ function Register() {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      console.log("Registering:", { email, password });
-      navigate("/login");
+      try {
+        const response = await fetch("http://localhost:4000/api/users/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          navigate("/login"); // ✅ redirect to login
+        } else {
+          alert(data.message || "Registration failed.");
+        }
+      } catch (error) {
+        console.error("Signup Error", error);
+        alert("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -44,6 +62,15 @@ function Register() {
       <h2>Google Classroom</h2>
 
       <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Full Name"
+          className="input-field"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        {errors.name && <p className="error-text">{errors.name}</p>}
+
         <input
           type="text"
           placeholder="Email"
