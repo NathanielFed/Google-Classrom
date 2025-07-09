@@ -2,7 +2,7 @@ import express from 'express';
 import Post from '../models/postModel.js';
 const router = express.Router();
 
-// ✅ Create a post
+// Create a post
 router.post('/', async (req, res) => {
   const { message, userName, classId } = req.body;
 
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// ✅ Get all posts for a specific class
+// Get all posts for a specific class
 router.get('/class/:classId', async (req, res) => {
   try {
     const posts = await Post.find({ classId: req.params.classId }).sort({ createdAt: -1 });
@@ -31,7 +31,7 @@ router.get('/class/:classId', async (req, res) => {
   }
 });
 
-// ✅ Update a post by ID
+// Update a post by ID
 router.put('/:id', async (req, res) => {
   const { message } = req.body;
 
@@ -57,7 +57,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// ✅ Delete a post by ID
+// Delete a post by ID
 router.delete('/:id', async (req, res) => {
   try {
     const deleted = await Post.findByIdAndDelete(req.params.id);
@@ -83,15 +83,54 @@ router.post('/:postId/comments', async (req, res) => {
     const post = await Post.findById(req.params.postId);
     if (!post) return res.status(404).json({ error: 'Post not found' });
 
-    const comment = { message, userName, createdAt: new Date() }; // ✅ Add createdAt here
+    const comment = { message, userName, createdAt: new Date() };
     post.comments.push(comment);
     await post.save();
 
-    res.status(201).json(comment); // This now includes createdAt
+    res.status(201).json(comment);
   } catch (err) {
     console.error('Error adding comment:', err);
     res.status(500).json({ error: 'Failed to add comment' });
   }
 });
+
+// Toggle reaction
+router.put('/:postId/react', async (req, res) => {
+  const { userName, emoji } = req.body;
+
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ error: 'Post not found' });
+
+    // Remove existing reaction from this user
+    post.likes = post.likes.filter((like) => like.userName !== userName);
+
+    // Add new reaction if provided
+    if (emoji) {
+      post.likes.push({ userName, emoji });
+    }
+
+    await post.save();
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to react to post' });
+  }
+});
+
+
+// Pinning a post
+router.put('/:postId/pin', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ error: 'Post not found' });
+
+    post.pinned = !post.pinned;
+    await post.save();
+    res.json(post);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to toggle pin' });
+  }
+});
+
 
 export default router;

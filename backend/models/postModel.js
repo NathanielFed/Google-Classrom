@@ -1,17 +1,30 @@
 const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-  message: { type: String, required: true },
-  userName: { type: String, required: true },
-  classId: { type: String, required: true },
+  message: String,
+  userName: String,
+  classId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Class',
+  },
   comments: [
     {
-      userName: { type: String, required: true },
-      message: { type: String, required: true },
-      createdAt: { type: Date, default: Date.now }
+      message: String,
+      userName: String,
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
+  likes: [
+    {
+      userName: String,
+      emoji: String
     }
-  ]
-}, { timestamps: true });
+  ],
+  pinned: { type: Boolean, default: false }, // 👈 and this
+}, {
+  timestamps: true
+});
+
 
 
 module.exports = mongoose.model('Post', postSchema);
