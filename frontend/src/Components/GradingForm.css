@@ -137,13 +137,82 @@ body {
   color: #333;
 }
 
+/* ✅ New: style for StudentView panel */
+.student-view-panel {
+  flex: 1 1 340px;
+  min-width: 320px;
+  background: #f9fafb;
+  padding: 2rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.student-view-panel h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.student-view-panel label {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.student-view-panel select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  background: #fff;
+  transition: border 0.2s;
+}
+
+.student-view-panel select:focus {
+  border-color: #4f8cff;
+  outline: none;
+}
+
+.student-view-panel table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  margin-top: 1rem;
+}
+
+.student-view-panel th,
+.student-view-panel td {
+  border: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.student-view-panel th {
+  background-color: #f3f4f6;
+  font-weight: 700;
+  color: #222;
+}
+
+.student-view-panel td {
+  min-width: 120px;
+  color: #333;
+}
+
 @media (max-width: 900px) {
   .grading-container {
     flex-direction: column;
     padding: 1rem;
   }
   .assignment-panel,
-  .grading-panel {
+  .grading-panel,
+  .student-view-panel {
     min-width: unset;
     width: 100%;
     margin-bottom: 1.5rem;

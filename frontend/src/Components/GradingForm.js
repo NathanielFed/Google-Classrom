@@ -13,34 +13,49 @@ const GradingForm = () => {
   const [assignment, setAssignment] = useState(null);
   const [grade, setGrade] = useState('');
   const [comment, setComment] = useState('');
-
+  const [editIndex, setEditIndex] = useState(null); 
   React.useEffect(() => {
     const found = assignments.find(a => a._id === selectedId);
     setAssignment(found || null);
-    setGrade(found?.grade || '');
-    setComment(found?.comment || '');
+    setGrade('');
+    setComment('');
+    setEditIndex(null);
   }, [selectedId, assignments]);
 
   const handleSubmit = (e) => {
-  e.preventDefault();
-  if (!assignment) return;
-  alert(`Grade for ${assignment.studentName}: ${grade}\nComment: ${comment}`);
+    e.preventDefault();
+    if (!assignment) return;
 
-  const newGrade = { grade, comment, date: new Date().toLocaleString() };
+    const newGradeObj = { grade, comment, date: new Date().toLocaleString() };
 
-  const updatedAssignments = assignments.map(a =>
-    a._id === assignment._id
-      ? { ...a, grades: [...(a.grades || []), newGrade] }
-      : a
-  );
-  setAssignments(updatedAssignments);
-  setAssignment({
-    ...assignment,
-    grades: [...(assignment.grades || []), newGrade]
-  });
-  setGrade('');
-  setComment('');
-};
+    let updatedGrades;
+    if (editIndex !== null) {
+  
+      updatedGrades = [...assignment.grades];
+      updatedGrades[editIndex] = newGradeObj;
+    } else {
+
+      updatedGrades = [...(assignment.grades || []), newGradeObj];
+    }
+
+    const updatedAssignments = assignments.map(a =>
+      a._id === assignment._id ? { ...a, grades: updatedGrades } : a
+    );
+
+    setAssignments(updatedAssignments);
+    setAssignment({ ...assignment, grades: updatedGrades });
+    setGrade('');
+    setComment('');
+    setEditIndex(null);
+  };
+
+  const handleEdit = (index) => {
+    if (!assignment || !assignment.grades[index]) return;
+    setGrade(assignment.grades[index].grade);
+    setComment(assignment.grades[index].comment);
+    setEditIndex(index);
+  };
+
   return (
     <div className="grading-container">
       <div className="assignment-panel">
@@ -66,16 +81,16 @@ const GradingForm = () => {
               <p>{assignment.submissionPreview || 'No preview available.'}</p>
             </div>
             <div>
-  <strong>Current Grade:</strong>{' '}
-  {assignment.grades && assignment.grades.length > 0
-    ? assignment.grades[assignment.grades.length - 1].grade
-    : 'Not graded'}
-  <br />
-  <strong>Current Comment:</strong>{' '}
-  {assignment.grades && assignment.grades.length > 0
-    ? assignment.grades[assignment.grades.length - 1].comment
-    : 'No comment'}
-</div>
+              <strong>Current Grade:</strong>{' '}
+              {assignment.grades && assignment.grades.length > 0
+                ? assignment.grades[assignment.grades.length - 1].grade
+                : 'Not graded'}
+              <br />
+              <strong>Current Comment:</strong>{' '}
+              {assignment.grades && assignment.grades.length > 0
+                ? assignment.grades[assignment.grades.length - 1].comment
+                : 'No comment'}
+            </div>
           </div>
         )}
       </div>
@@ -84,23 +99,23 @@ const GradingForm = () => {
         <form onSubmit={handleSubmit}>
           <label htmlFor="grade">Grade (out of 100)</label>
           <input
-  type="number"
-  id="grade"
-  value={grade}
-  onChange={e => {
-    const val = e.target.value;
-    if (val === '' || (Number(val) >= 0 && Number(val) <= 100)) {
-      setGrade(val);
-    }
-  }}
-  placeholder="e.g., 85"
-  min="0"
-  max="100"
-  required
-  inputMode="numeric"
-  pattern="[0-9]*"
-  disabled={!assignment}
-/>
+            type="number"
+            id="grade"
+            value={grade}
+            onChange={e => {
+              const val = e.target.value;
+              if (val === '' || (Number(val) >= 0 && Number(val) <= 100)) {
+                setGrade(val);
+              }
+            }}
+            placeholder="e.g., 85"
+            min="0"
+            max="100"
+            required
+            inputMode="numeric"
+            pattern="[0-9]*"
+            disabled={!assignment}
+          />
 
           <label htmlFor="comment">Private Comment</label>
           <textarea
@@ -111,9 +126,28 @@ const GradingForm = () => {
             disabled={!assignment}
           ></textarea>
 
-          <button type="submit" disabled={!assignment}>Return</button>
+          <button type="submit" disabled={!assignment}>
+            {editIndex !== null ? 'Update Grade' : 'Return'}
+          </button>
         </form>
       </div>
+
+      {assignment && assignment.grades && assignment.grades.length > 0 && (
+        <div className="grading-panel">
+          <h3>All Grades: </h3>
+          {assignment.grades.map((g, idx) => (
+            <div key={idx} style={{ marginBottom: '0.5rem' }}>
+              <strong>Task {idx + 1}:</strong> Grade: {g.grade}, Comment: {g.comment}
+              <button
+                style={{ marginLeft: '1rem', fontSize: '0.8rem', padding: '2px 6px' }}
+                onClick={() => handleEdit(idx)}
+              >
+                Edit
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="all-grades-panel" style={{ marginTop: '2rem' }}>
         <h3>All Students' Grades</h3>
@@ -126,30 +160,30 @@ const GradingForm = () => {
             </tr>
           </thead>
           <tbody>
-  {assignments.map(a => (
-    <tr key={a._id}>
-      <td>{a.studentName}</td>
-      <td>
-        {a.grades && a.grades.length > 0
-          ? a.grades.map((g, idx) => (
-              <div key={idx}>
-                <strong>Task {idx + 1}:</strong> {g.grade}
-              </div>
-            ))
-          : 'Not graded'}
-      </td>
-      <td>
-        {a.grades && a.grades.length > 0
-          ? a.grades.map((g, idx) => (
-              <div key={idx}>
-                <strong>Task {idx + 1}:</strong> {g.comment}
-              </div>
-            ))
-          : ''}
-      </td>
-    </tr>
-  ))}
-</tbody>
+            {assignments.map(a => (
+              <tr key={a._id}>
+                <td>{a.studentName}</td>
+                <td>
+                  {a.grades && a.grades.length > 0
+                    ? a.grades.map((g, idx) => (
+                        <div key={idx}>
+                          <strong>Task {idx + 1}:</strong> {g.grade}
+                        </div>
+                      ))
+                    : 'Not graded'}
+                </td>
+                <td>
+                  {a.grades && a.grades.length > 0
+                    ? a.grades.map((g, idx) => (
+                        <div key={idx}>
+                          <strong>Task {idx + 1}:</strong> {g.comment}
+                        </div>
+                      ))
+                    : ''}
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
