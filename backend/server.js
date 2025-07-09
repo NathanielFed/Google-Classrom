@@ -1,11 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const userRoutes = require('./routes/userRoutes');
-const classRoutes = require('./routes/classRoutes');
-const postRoutes = require('./routes/posts');
-const assignments = require('./routes/assignments');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import userRoutes from './routes/userRoutes.js';
+import classRoutes from './routes/classRoutes.js';
+import postRoutes from './routes/posts.js';
+import assignments from './routes/assignments.js';
+import submissions from './routes/submissions.js';
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/classes', classRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/assignments', assignments);
+app.use('/api/submissions', submissions);
 
-// Port and Server Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
