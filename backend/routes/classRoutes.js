@@ -18,9 +18,9 @@ router.post('/create', async (req, res) => {
 
 
 router.post('/join', async (req, res) => {
-  const { classCode, userId } = req.body;
+  const { classCode, email } = req.body;
 
-  if (!classCode || !userId) {
+  if (!classCode || !email) {
     return res.status(400).json({ success: false, error: 'classCode and userId are required' });
   }
 
@@ -31,12 +31,12 @@ router.post('/join', async (req, res) => {
     }
 
     // Prevent duplicate join
-    if (classroom.students.includes(userId)) {
+    if (classroom.students.includes(email)) {
       return res.status(400).json({ success: false, error: 'User already joined this class' });
     }
 
     // Add student ID to class
-    classroom.students.push(userId);
+    classroom.students.push(email);
     await classroom.save();
 
     res.status(200).json({ success: true, message: 'Successfully joined the class' });

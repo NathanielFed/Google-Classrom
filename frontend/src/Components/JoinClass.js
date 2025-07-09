@@ -2,12 +2,16 @@ import "./JoinClass.css";
 function JoinClass() {
     function getInput(){
         let classCode = document.getElementById("classCode").value;
-        const user = JSON.parse(localStorage.getItem("user"));
+        let email = localStorage.getItem("email");
+        if(!email){
+            alert("user not logged in");
+            return;
+        }
 
         fetch("http://localhost:5000/api/classes/join", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ classCode, userId: user.id }),
+            body: JSON.stringify({ classCode, email }),
         })
         .then(res => res.json())
         .then(data => {
