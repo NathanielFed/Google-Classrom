@@ -58,23 +58,13 @@ router.post('/create', async (req, res) => {
 router.get('/class-list', async (req, res) => {
   const email = req.query.email;
   try {
-    const user = await User.findOne({ email: email });
-    console.log(user.id);
-    
-    const teacherclasses = await Class.find({
-      $or: [
-        { teacherID: user._id },
-        { students: user.email }
-      ]
-    });
-    console.log(teacherclasses);
-    res.status(200).json({ success: true, data: teacherclasses });
+    const classes = await Class.find({ teacherID: "686bb94e51f344189d55bab2" }); //Change to user pls tnx
+    res.status(200).json({ success: true, data: classes });
   } catch (err) {
     console.error('Error fetching class list:', err);
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
-
 
 
 router.post('/join', async (req, res) => {
