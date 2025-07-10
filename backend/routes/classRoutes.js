@@ -20,9 +20,11 @@ router.post('/create', async (req, res) => {
       if (!existingClass) isUnique = true;
     }
     const userEmail = await User.findOne({ email });
+    const teacherEmail = userEmail.email;
     const teacherID = userEmail?._id;
     const newClass = new Class({
       teacherID,
+      teacherEmail,
       className,
       section,
       subject,
@@ -35,6 +37,7 @@ router.post('/create', async (req, res) => {
     // Log successful creation to console
     console.log(`New classroom created successfully:`);
     console.log(`- Teacher ID: ${teacherID}`);
+    console.log(`- Teacher email: ${teacherEmail}`);
     console.log(`- Class Name: ${className}`);
     console.log(`- Class Code: ${classCode}`);
     console.log(`- Section: ${section}`);
@@ -54,11 +57,18 @@ router.post('/create', async (req, res) => {
 
 router.get('/class-list', async (req, res) => {
   const email = req.query.email;
-  console.log("hi");
   try {
-    const classes = await Class.find({ teacherID: "686bb94e51f344189d55bab2" }); //Change to user pls tnx
-    console.log(classes);
-    res.status(200).json({ success: true, data: classes });
+    const user = await User.findOne({ email: email });
+    console.log(user.id);
+    
+    const teacherclasses = await Class.find({
+      $or: [
+        { teacherID: user._id },
+        { students: user.email }
+      ]
+    });
+    console.log(teacherclasses);
+    res.status(200).json({ success: true, data: teacherclasses });
   } catch (err) {
     console.error('Error fetching class list:', err);
     res.status(500).json({ success: false, error: 'Internal server error' });
@@ -76,14 +86,14 @@ router.post('/join', async (req, res) => {
 
   try {
     const classroom = await Class.findOne({ classCode });
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
     const userID = user._id;
     if (!classroom) {
       return res.status(404).json({ success: false, error: 'Class not found' });
     }
     console.log(classroom.teacherID.toString());
     console.log(userID);
-    if(classroom.teacherID.toString() === userID.toString()){
+    if (classroom.teacherID.toString() === userID.toString()) {
       return res.status(400).json({ success: false, error: 'User is a Teacher in this class' });
 
     }

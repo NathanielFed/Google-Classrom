@@ -89,7 +89,7 @@ const StudentDashboard = () => {
             id: cls._id,
             title: cls.className,
             section: cls.section || "",
-            teacher: cls.teacherID,
+            teacher: cls.teacherEmail,
             color: getRandomColor(),
           }));
           setClasses(formatted);
@@ -185,7 +185,7 @@ const StudentDashboard = () => {
                 </div>
               </div>
               <div className="class-card-body">
-                <div className="class-card-teacher">{cls.teacher || cls.teacherID || ""}</div>
+                <div className="class-card-teacher">Teacher: {cls.teacher || cls.teacherID || ""}</div>
                 <div className="class-card-stats">
                   <div>{assignmentsData[cls.id || cls._id] ?? "..."} assignments due</div>
                   <div>{cls.announcements || 0} new announcements</div>
