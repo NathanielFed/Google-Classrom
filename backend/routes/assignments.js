@@ -8,9 +8,8 @@ router.get('/:classroomId', async (req, res) => {
 
   try {
     const now = new Date();
-
     const assignments = await Assignment.find({
-      classroomId,
+      classroomId: classroomId,
       deadline: { $gte: now },
     }).sort({ deadline: 1 });
 

@@ -1,7 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import { TeacherDashboard, StudentDashboard } from './Pages/Dashboard';
@@ -11,8 +10,9 @@ import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import GradingForm from './Components/GradingForm';
 import JoinClass from './Components/JoinClass'
-
 import CreateAssignmentForm from './Components/CreateAssignmentForm';
+import StudentSubmissionPage from './Pages/StudentSubmissionPage';
+import AssignmentsListPage from './Pages/AssignmentsListPage';
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -56,6 +56,8 @@ function App() {
               <Route path="/gradingForm" element={<GradingForm />} />
               <Route path="/joinClass" element={<JoinClass />} />
               <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
+              <Route path="/assignments/:classroomId" element={<AssignmentsListPage />} />
+              <Route path="/submit-assignment/:assignmentId" element={<StudentSubmissionPage />} />
             </Routes>
           </div>
         </main>
