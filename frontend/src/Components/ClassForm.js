@@ -1,19 +1,17 @@
 import "./ClassForm.css";
 function CLassForm() {
     function getInput() {
-
-        //let teacherID = document.getElementById("teacherID").value;
-        let teacherID = "686bb94e51f344189d55bab2";
         let classCode = "code123";
         let className = document.getElementById("className").value;
         let section = document.getElementById("section").value;
         let subject = document.getElementById("subject").value;
         let room = document.getElementById("room").value;
+        let email = localStorage.getItem("email");
 
         fetch("http://localhost:5000/api/classes/create", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ teacherID, className, section, subject, room, classCode }),
+            body: JSON.stringify({ email, className, section, subject, room, classCode }),
         })
         .then(res => res.json())
         .then(data => {
