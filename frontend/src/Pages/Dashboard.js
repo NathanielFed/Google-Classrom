@@ -3,8 +3,10 @@ import "./Dashboard.css";
 import ClassForm from "../Components/ClassForm";
 import JoinClass from "../Components/JoinClass";
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../Components/Navbar';
+import Sidebar from '../Components/Sidebar';
 
-const TeacherDashboard = () => {
+export function TeacherDashboard({ sidebarCollapsed, onToggleSidebar, userProfilePic, userRole }) {
   const navigate = useNavigate();
   const [showClassForm, setShowClassForm] = useState(false);
   const [classes, setClasses] = useState([]);
@@ -33,46 +35,59 @@ const TeacherDashboard = () => {
   }, []);
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>Classes</h1>
+    <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+      <Navbar
+        onToggleSidebar={onToggleSidebar}
+        isSidebarCollapsed={sidebarCollapsed}
+        userProfilePic={userProfilePic}
+        userRole={userRole}
+      />
+      <div className="sidebar">
+        <Sidebar collapsed={sidebarCollapsed} />
       </div>
-      {showClassForm && <ClassForm onClose={() => setShowClassForm(false)} />}
-      {loading ? (
-        <div>Loading...</div>
-      ) : error ? (
-        <div>Error: {error}</div>
-      ) : (
-        <div className="class-grid">
-          {classes.map((cls) => (
-            <div 
-              className="class-card" 
-              key={cls.id || cls._id}
-              onClick={() => navigate(`/class/${cls.id || cls._id}`)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="class-card-header" style={{ backgroundColor: cls.color || cls.bannerColor || "#4285F4" }}>
-                <div className="class-card-logo">{cls.title ? cls.title.charAt(0) : (cls.className ? cls.className.charAt(0) : "C")}</div>
-                <div>
-                  <div className="class-card-title">{cls.title || cls.className}</div>
-                  <div className="class-card-section">{cls.section}</div>
+      <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+        <div className="dashboard-container">
+          <div className="dashboard-header">
+            <h1>Classes</h1>
+          </div>
+          {showClassForm && <ClassForm onClose={() => setShowClassForm(false)} />}
+          {loading ? (
+            <div>Loading...</div>
+          ) : error ? (
+            <div>Error: {error}</div>
+          ) : (
+            <div className="class-grid">
+              {classes.map((cls) => (
+                <div
+                  className="class-card"
+                  key={cls.id || cls._id}
+                  onClick={() => navigate(`/class/${cls.id || cls._id}`)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="class-card-header" style={{ backgroundColor: cls.color || cls.bannerColor || "#4285F4" }}>
+                    <div className="class-card-logo">{cls.title ? cls.title.charAt(0) : (cls.className ? cls.className.charAt(0) : "C")}</div>
+                    <div>
+                      <div className="class-card-title">{cls.title || cls.className}</div>
+                      <div className="class-card-section">{cls.section}</div>
+                    </div>
+                  </div>
+                  <div className="class-card-body">
+                    <div className="class-card-stats">
+                      <div>{cls.students || 0} students</div>
+                      <div>{cls.assignments || 0} active assignments</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="class-card-body">
-                <div className="class-card-stats">
-                  <div>{cls.students || 0} students</div>
-                  <div>{cls.assignments || 0} active assignments</div>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+      </main>
     </div>
   );
-};
+}
 
-const StudentDashboard = () => {
+export function StudentDashboard({ sidebarCollapsed, onToggleSidebar, userProfilePic, userRole }) {
   const [classes, setClasses] = useState([]);
   const [assignmentsData, setAssignmentsData] = useState({});
   const [showJoinClass, setShowJoinClass] = useState(false);
@@ -122,41 +137,8 @@ const StudentDashboard = () => {
       }
       setAssignmentsData(updatedData);
     };
-
     if (classes.length > 0) fetchAssignments();
   }, [classes]);
-
-  // const [assignmentsData, setAssignmentsData] = useState({});
-
-  // useEffect(() => {
-  //   const fetchAssignments = async () => {
-  //     const token = localStorage.getItem("token");
-  //     const updatedData = {};
-
-  //     // for (const cls of studentClasses) {
-  //     //   try {
-  //     //     const res = await fetch(`http://localhost:5000/api/assignments/classroom/${cls.id}`, {
-  //     //       headers: { Authorization: `Bearer ${token}` }
-  //     //     });
-
-  //     //     const assignments = await res.json();
-  //     //     const now = new Date();
-
-  //     //     const activeAssignments = assignments.filter(
-  //     //       (a) => new Date(a.deadline) > now
-  //     //     );
-
-  //     //     updatedData[cls.id] = activeAssignments.length;
-  //     //   } catch (err) {
-  //     //     console.error(`Error fetching assignments for class ${cls.title}:`, err);
-  //     //     updatedData[cls.id] = 0;
-  //     //   }
-  //     // }
-  //     // setAssignmentsData(updatedData);
-  //   };
-
-  //   fetchAssignments();
-  // }, []);
 
   const getRandomColor = () => {
     const colors = ["#4285F4", "#EA4335", "#FBBC05", "#34A853"];
@@ -164,39 +146,50 @@ const StudentDashboard = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>Classes</h1>
+    <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+      <Navbar
+        onToggleSidebar={onToggleSidebar}
+        isSidebarCollapsed={sidebarCollapsed}
+        userProfilePic={userProfilePic}
+        userRole={userRole}
+      />
+      <div className="sidebar">
+        <Sidebar collapsed={sidebarCollapsed} />
       </div>
-      {showJoinClass && <JoinClass onClose={() => setShowJoinClass(false)} />}
-      {loading ? (
-        <div>Loading...</div>
-      ) : error ? (
-        <div>Error: {error}</div>
-      ) : (
-        <div className="class-grid">
-          {classes.map((cls) => (
-            <div className="class-card" key={cls.id || cls._id}>
-              <div className="class-card-header" style={{ backgroundColor: cls.color || cls.bannerColor || "#4285F4" }}>
-                <div className="class-card-logo">{cls.title ? cls.title.charAt(0) : (cls.className ? cls.className.charAt(0) : "C")}</div>
-                <div>
-                  <div className="class-card-title">{cls.title || cls.className}</div>
-                  <div className="class-card-section">{cls.section}</div>
+      <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+        <div className="dashboard-container">
+          <div className="dashboard-header">
+            <h1>Classes</h1>
+          </div>
+          {showJoinClass && <JoinClass onClose={() => setShowJoinClass(false)} />}
+          {loading ? (
+            <div>Loading...</div>
+          ) : error ? (
+            <div>Error: {error}</div>
+          ) : (
+            <div className="class-grid">
+              {classes.map((cls) => (
+                <div className="class-card" key={cls.id || cls._id}>
+                  <div className="class-card-header" style={{ backgroundColor: cls.color || cls.bannerColor || "#4285F4" }}>
+                    <div className="class-card-logo">{cls.title ? cls.title.charAt(0) : (cls.className ? cls.className.charAt(0) : "C")}</div>
+                    <div>
+                      <div className="class-card-title">{cls.title || cls.className}</div>
+                      <div className="class-card-section">{cls.section}</div>
+                    </div>
+                  </div>
+                  <div className="class-card-body">
+                    <div className="class-card-teacher">{cls.teacher || cls.teacherID || ""}</div>
+                    <div className="class-card-stats">
+                      <div>{assignmentsData[cls.id || cls._id] ?? "..."} assignments due</div>
+                      <div>{cls.announcements || 0} new announcements</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="class-card-body">
-                <div className="class-card-teacher">{cls.teacher || cls.teacherID || ""}</div>
-                <div className="class-card-stats">
-                  <div>{assignmentsData[cls.id || cls._id] ?? "..."} assignments due</div>
-                  <div>{cls.announcements || 0} new announcements</div>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+      </main>
     </div>
   );
-};
-
-export { TeacherDashboard, StudentDashboard };
+}

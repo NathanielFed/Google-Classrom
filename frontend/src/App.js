@@ -22,31 +22,12 @@ function StreamWithParams() {
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const userProfilePic = null;
-
-  const isAuthenticated = false;
   const userRole = 'teacher';
-
   const handleToggleSidebar = () => {
     setSidebarCollapsed((prev) => !prev);
   };
-
-  const showNavAndSidebar = window.location.pathname.startsWith('/dashboard');
-
   return (
     <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
-      {showNavAndSidebar && (
-        <>
-          <Navbar
-            onToggleSidebar={handleToggleSidebar}
-            isSidebarCollapsed={sidebarCollapsed}
-            userProfilePic={userProfilePic}
-            userRole={userRole}
-          />
-          <div className="sidebar">
-            <Sidebar collapsed={sidebarCollapsed} />
-          </div>
-        </>
-      )}
       <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
         <div className="content-wrapper">
           <Routes>
@@ -54,7 +35,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route
               path="/dashboard"
-              element={userRole === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />}
+              element={userRole === 'teacher' ? <TeacherDashboard sidebarCollapsed={sidebarCollapsed} onToggleSidebar={handleToggleSidebar} userProfilePic={userProfilePic} userRole={userRole} /> : <StudentDashboard sidebarCollapsed={sidebarCollapsed} onToggleSidebar={handleToggleSidebar} userProfilePic={userProfilePic} userRole={userRole} />}
             />
             <Route path="/classForm" element={<CLassForm />} />
             <Route path="/stream" element={<Stream />} />
