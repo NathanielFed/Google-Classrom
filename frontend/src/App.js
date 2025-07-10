@@ -55,7 +55,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route
                 path="/dashboard"
-                element={userRole === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />}
+                element={userRole === 'student' ? <TeacherDashboard /> : <StudentDashboard />}
               />
               <Route path="/classForm" element={<CLassForm />} />
               <Route path="/stream" element={<Stream />} />
