@@ -21,6 +21,7 @@ function Login() {
       const data = await res.json();
       if (res.ok && data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("email", data.user.email);
         return { success: true };
       } else {
         return { success: false, message: data.message || "Login failed" };

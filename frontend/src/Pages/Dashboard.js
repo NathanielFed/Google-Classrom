@@ -80,24 +80,27 @@ const StudentDashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/classes", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error("Failed to fetch classes");
-        const data = await res.json();
-        setClasses(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchClasses();
+    const email = localStorage.getItem("email");
+    fetch(`http://localhost:5000/api/classes/class-list?email=${encodeURIComponent(email)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const formatted = data.data.map(cls => ({
+            id: cls._id,
+            title: cls.className,
+            section: cls.section || "",
+            teacher: cls.teacherID,
+            color: getRandomColor(),
+          }));
+          setClasses(formatted);
+        } else {
+          setError("Failed to fetch class list");
+        }
+      })
+      .catch(err => {
+        setError("Error fetching class list");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -119,8 +122,46 @@ const StudentDashboard = () => {
       }
       setAssignmentsData(updatedData);
     };
+
     if (classes.length > 0) fetchAssignments();
   }, [classes]);
+
+  // const [assignmentsData, setAssignmentsData] = useState({});
+
+  // useEffect(() => {
+  //   const fetchAssignments = async () => {
+  //     const token = localStorage.getItem("token");
+  //     const updatedData = {};
+
+  //     // for (const cls of studentClasses) {
+  //     //   try {
+  //     //     const res = await fetch(`http://localhost:5000/api/assignments/classroom/${cls.id}`, {
+  //     //       headers: { Authorization: `Bearer ${token}` }
+  //     //     });
+
+  //     //     const assignments = await res.json();
+  //     //     const now = new Date();
+
+  //     //     const activeAssignments = assignments.filter(
+  //     //       (a) => new Date(a.deadline) > now
+  //     //     );
+
+  //     //     updatedData[cls.id] = activeAssignments.length;
+  //     //   } catch (err) {
+  //     //     console.error(`Error fetching assignments for class ${cls.title}:`, err);
+  //     //     updatedData[cls.id] = 0;
+  //     //   }
+  //     // }
+  //     // setAssignmentsData(updatedData);
+  //   };
+
+  //   fetchAssignments();
+  // }, []);
+
+  const getRandomColor = () => {
+    const colors = ["#4285F4", "#EA4335", "#FBBC05", "#34A853"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
 
   return (
     <div className="dashboard-container">

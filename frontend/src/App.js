@@ -1,7 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
 import { Routes, Route, BrowserRouter, useParams } from 'react-router-dom';
-
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import { TeacherDashboard, StudentDashboard } from './Pages/Dashboard';
@@ -12,6 +11,8 @@ import Sidebar from './Components/Sidebar';
 import GradingForm from './Components/GradingForm';
 import JoinClass from './Components/JoinClass';
 import CreateAssignmentForm from './Components/CreateAssignmentForm';
+import StudentSubmissionPage from './Pages/StudentSubmissionPage';
+import AssignmentsListPage from './Pages/AssignmentsListPage';
 
 function StreamWithParams() {
   const { classId } = useParams();
@@ -61,7 +62,6 @@ function App() {
               <Route path="/gradingForm" element={<GradingForm />} />
               <Route path="/joinClass" element={<JoinClass />} />
               <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
-              <Route path="/class/:classId" element={<StreamWithParams />} />
             </Routes>
           </div>
         </main>
