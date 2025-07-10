@@ -3,7 +3,7 @@ function CLassForm() {
     function getInput() {
 
         //let teacherID = document.getElementById("teacherID").value;
-        let teacherID = "teacher123";
+        let teacherID = "686bb94e51f344189d55bab2";
         let classCode = "code123";
         let className = document.getElementById("className").value;
         let section = document.getElementById("section").value;

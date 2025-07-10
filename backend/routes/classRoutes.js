@@ -1,5 +1,6 @@
 import express from 'express';
 import Class from '../models/classModel.js';
+import generateClassCode from '../middleware/classCode.js';
 
 const router = express.Router();
 
@@ -50,8 +51,10 @@ router.post('/create', async (req, res) => {
 
 router.get('/class-list', async (req, res) => {
   const email = req.query.email;
+  console.log("hi");
   try {
-    const classes = await Class.find({students: email }); 
+    const classes = await Class.find({teacherID: "686bb94e51f344189d55bab2" });
+    console.log(classes);
     res.status(200).json({ success: true, data: classes });
   } catch (err) {
     console.error('Error fetching class list:', err);
