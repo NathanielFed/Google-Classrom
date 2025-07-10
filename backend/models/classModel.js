@@ -22,6 +22,15 @@ const classSchema = new mongoose.Schema({
     room: {
         type: String,
         trim: true,
+    },
+    students: {
+        type: [String], // ← array of strings
+        default: [],
+        trim: true
+    },
+    classCode: {
+        type: String,
+        trim: true,
     }
 }, {
     _id: true,

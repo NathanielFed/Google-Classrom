@@ -3,7 +3,8 @@ function CLassForm() {
     function getInput() {
 
         //let teacherID = document.getElementById("teacherID").value;
-        let teacherID = "test123";
+        let teacherID = "teacher123";
+        let classCode = "code123";
         let className = document.getElementById("className").value;
         let section = document.getElementById("section").value;
         let subject = document.getElementById("subject").value;
@@ -12,10 +13,11 @@ function CLassForm() {
         fetch("http://localhost:5000/api/classes/create", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ teacherID, className, section, subject, room }),
+            body: JSON.stringify({ teacherID, className, section, subject, room, classCode }),
         })
         .then(res => res.json())
         .then(data => {
+            
             if (data.success) alert("Class saved!");
             else alert("Error: " + data.error);
         })

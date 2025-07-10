@@ -4,7 +4,9 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoutes from './routes/userRoutes.js';
 import classRoutes from './routes/classRoutes.js';
-import postRoutes from './routes/posts.js'
+import postRoutes from './routes/posts.js';
+import assignments from './routes/assignments.js';
+import submissions from './routes/submissions.js';
 
 dotenv.config();
 
@@ -21,8 +23,8 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api/users', userRoutes);
 app.use('/api/classes', classRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/assignments', assignments);
+app.use('/api/submissions', submissions);
 
-
-// Port and Server Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

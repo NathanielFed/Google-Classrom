@@ -1,31 +1,36 @@
 import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import jwtDecode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
 
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  // ✅ Submit user info to backend
+  // Submit user info to backend and get JWT
   const saveUserToDB = async (userData) => {
     try {
-      await fetch("http://localhost:4000/api/users/login-or-register", {
+      const res = await fetch("http://localhost:5000/api/users/login-or-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem("token", data.token);
+        return { success: true };
+      } else {
+        return { success: false, message: data.message || "Login failed" };
+      }
     } catch (err) {
-      console.error("Error saving user:", err);
+      return { success: false, message: "Network error" };
     }
   };
 
-  // ✅ Google Login
+  // Google Login
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -34,25 +39,29 @@ function Login() {
         });
         const profile = await res.json();
 
-        // Save to DB
-        await saveUserToDB({
+        // Save to DB and get JWT
+        const result = await saveUserToDB({
           email: profile.email,
           name: profile.name,
           picture: profile.picture,
           loginType: "google",
         });
 
-        navigate("/dashboard");
+        if (result.success) {
+          navigate("/dashboard");
+        } else {
+          setErrors({ general: result.message });
+        }
       } catch (err) {
-        console.error("Google login failed", err);
+        setErrors({ general: "Google login failed" });
       }
     },
     onError: () => {
-      console.error("Login Failed");
+      setErrors({ general: "Google login failed" });
     },
   });
 
-  // ✅ Manual login
+  // Manual login
   const handleSubmit = async (e) => {
     e.preventDefault();
     const currentErrors = {};
@@ -64,14 +73,17 @@ function Login() {
     setErrors(currentErrors);
 
     if (Object.keys(currentErrors).length === 0) {
-      // Save to DB (simulated login)
-      await saveUserToDB({
+      const result = await saveUserToDB({
         email,
         password,
         loginType: "manual",
       });
 
-      navigate("/dashboard");
+      if (result.success) {
+        navigate("/dashboard");
+      } else {
+        setErrors({ general: result.message });
+      }
     }
   };
 
@@ -107,6 +119,8 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
           {errors.password && <p className="error-text">{errors.password}</p>}
+
+          {errors.general && <p className="error-text">{errors.general}</p>}
 
           <div className="login-actions">
             <button className="login-btn" type="submit">Login</button>
