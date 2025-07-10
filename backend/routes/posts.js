@@ -1,5 +1,6 @@
 import express from 'express';
 import Post from '../models/postModel.js';
+import mongoose from 'mongoose';
 const router = express.Router();
 
 // Create a post
@@ -22,13 +23,11 @@ router.post('/', async (req, res) => {
 
 // Get all posts for a specific class
 router.get('/class/:classId', async (req, res) => {
-  try {
-    const posts = await Post.find({ classId: req.params.classId }).sort({ createdAt: -1 });
-    res.json(posts);
-  } catch (err) {
-    console.error('Error fetching posts:', err);
-    res.status(500).json({ error: 'Failed to fetch posts' });
-  }
+  const { classId } = req.params;
+  const validId = mongoose.Types.ObjectId.isValid(classId) ? new mongoose.Types.ObjectId(classId) : classId;
+
+  const posts = await Post.find({ classId: validId }).sort({ createdAt: -1 });
+  res.json(posts);
 });
 
 // Update a post by ID

@@ -9,9 +9,8 @@ const Stream = ({ classId }) => {
   const [editMessage, setEditMessage] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
 
-  const TEMP_USER_NAME = 'Test User';
-  const TEMP_COMMENTER = 'Test Student';
-  const REACTIONS = ['👍', '❤️', '💀', '😫'];
+  const userName = localStorage.getItem('name') || 'User';
+  const REACTIONS = ['👍', '❤️', '🔥', '😫'];
 
   const sortPosts = (unsorted, order = sortOrder) => {
     const sorted = [...unsorted].sort((a, b) =>
@@ -26,15 +25,17 @@ const Stream = ({ classId }) => {
 
   useEffect(() => {
     if (!classId) return;
+
     const fetchPosts = async () => {
       try {
         const res = await fetch(`http://localhost:5000/api/posts/class/${classId}`);
         const data = await res.json();
-        setPosts(sortPosts(Array.isArray(data) ? data : []));
+        setPosts(sortPosts(data));
       } catch (err) {
         console.error('Error loading posts:', err);
       }
     };
+
     fetchPosts();
   }, [classId]);
 
@@ -44,13 +45,17 @@ const Stream = ({ classId }) => {
 
   const post = async () => {
     if (!message.trim()) return;
+
     try {
       const res = await fetch('http://localhost:5000/api/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, userName: TEMP_USER_NAME, classId }),
+        body: JSON.stringify({ message, userName, classId }),
       });
+
+      if (!res.ok) throw new Error('Failed to post announcement');
       const newPost = await res.json();
+
       setPosts((prev) => sortPosts([newPost, ...prev]));
       setMessage('');
       setIsExpanded(false);
@@ -76,7 +81,10 @@ const Stream = ({ classId }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: editMessage }),
       });
+
+      if (!res.ok) throw new Error('Failed to update post');
       const updated = await res.json();
+
       setPosts((prev) =>
         sortPosts(prev.map((p) => (p._id === postId ? updated : p)))
       );
@@ -89,9 +97,11 @@ const Stream = ({ classId }) => {
 
   const deletePost = async (postId) => {
     try {
-      await fetch(`http://localhost:5000/api/posts/${postId}`, {
+      const res = await fetch(`http://localhost:5000/api/posts/${postId}`, {
         method: 'DELETE',
       });
+
+      if (!res.ok) throw new Error('Failed to delete post');
       setPosts((prev) => sortPosts(prev.filter((p) => p._id !== postId)));
     } catch (err) {
       console.error('Error deleting post:', err);
@@ -103,12 +113,20 @@ const Stream = ({ classId }) => {
       const res = await fetch(`http://localhost:5000/api/posts/${postId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: commentText, userName: TEMP_COMMENTER }),
+        body: JSON.stringify({
+          message: commentText,
+          userName,
+        }),
       });
+
+      if (!res.ok) throw new Error('Failed to add comment');
       const newComment = await res.json();
+
       setPosts((prev) =>
         prev.map((p) =>
-          p._id === postId ? { ...p, comments: [...(p.comments || []), newComment] } : p
+          p._id === postId
+            ? { ...p, comments: [...(p.comments || []), newComment] }
+            : p
         )
       );
       inputRef.value = '';
@@ -122,7 +140,10 @@ const Stream = ({ classId }) => {
       const res = await fetch(`http://localhost:5000/api/posts/${postId}/pin`, {
         method: 'PUT',
       });
+
+      if (!res.ok) throw new Error('Failed to pin post');
       const updated = await res.json();
+
       setPosts((prev) => sortPosts(prev.map((p) => (p._id === postId ? updated : p))));
     } catch (err) {
       console.error('Error pinning post:', err);
@@ -134,17 +155,20 @@ const Stream = ({ classId }) => {
       const res = await fetch(`http://localhost:5000/api/posts/${postId}/react`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName: TEMP_USER_NAME, emoji }),
+        body: JSON.stringify({ userName, emoji }),
       });
+
       const updated = await res.json();
-      setPosts((prev) => sortPosts(prev.map((p) => (p._id === postId ? updated : p))));
+      setPosts((prev) =>
+        sortPosts(prev.map((p) => (p._id === postId ? updated : p)))
+      );
     } catch (err) {
       console.error('Error reacting to post:', err);
     }
   };
 
   const getUserReaction = (post) => {
-    return (post.likes || []).find((like) => like.userName === TEMP_USER_NAME)?.emoji;
+    return post.likes?.find((like) => like.userName === userName)?.emoji;
   };
 
   const renderReactions = (post) => {
@@ -152,8 +176,9 @@ const Stream = ({ classId }) => {
     return (
       <div className="reactions-bar">
         {REACTIONS.map((emoji) => {
-          const count = (post.likes || []).filter((like) => like.emoji === emoji).length;
+          const count = post.likes?.filter((like) => like.emoji === emoji).length || 0;
           const active = userEmoji === emoji;
+
           return (
             <button
               key={emoji}
@@ -170,6 +195,7 @@ const Stream = ({ classId }) => {
 
   return (
     <div>
+      {/* Announcement input */}
       <div className={`announcement-card ${isExpanded ? 'expanded' : ''}`}>
         {!isExpanded ? (
           <div className="announcement-prompt" onClick={() => setIsExpanded(true)}>
@@ -178,23 +204,22 @@ const Stream = ({ classId }) => {
         ) : (
           <>
             <textarea
+              placeholder="Announce something to your class..."
               value={message}
               onChange={({ target }) => setMessage(target.value)}
               className="announcement-message-input"
               rows={5}
-              placeholder="Announce something to your class..."
             />
             <div className="announcement-actions">
-              <button onClick={cancel}>Cancel</button>
-              <button onClick={post} disabled={!message.trim()}>
-                Post
-              </button>
+              <button className="cancel-btn" onClick={cancel}>Cancel</button>
+              <button className="post-btn" onClick={post} disabled={!message.trim()}>Post</button>
             </div>
           </>
         )}
       </div>
 
-      <div className="sort-dropdown">
+      {/* Sorting dropdown below post box */}
+      <div className="sort-dropdown" style={{ marginTop: '10px' }}>
         <label>Sort by: </label>
         <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
           <option value="desc">Newest first</option>
@@ -202,12 +227,14 @@ const Stream = ({ classId }) => {
         </select>
       </div>
 
+      {/* Posts List */}
       {posts.length === 0 ? (
         <p>No announcements yet.</p>
       ) : (
         posts.map((post) => (
           <div key={post._id} className={`announcement-card ${post.pinned ? 'pinned' : ''}`}>
             <p><strong>{post.userName}</strong></p>
+
             {editId === post._id ? (
               <>
                 <textarea
@@ -217,8 +244,8 @@ const Stream = ({ classId }) => {
                   rows={3}
                 />
                 <div className="announcement-actions">
-                  <button onClick={() => setEditId(null)}>Cancel</button>
-                  <button onClick={() => saveEdit(post._id)} disabled={!editMessage.trim()}>
+                  <button className="cancel-btn" onClick={() => setEditId(null)}>Cancel</button>
+                  <button className="post-btn" onClick={() => saveEdit(post._id)} disabled={!editMessage.trim()}>
                     Save
                   </button>
                 </div>
@@ -226,12 +253,18 @@ const Stream = ({ classId }) => {
             ) : (
               <p>{post.message}</p>
             )}
-            <small>{post.createdAt ? new Date(post.createdAt).toLocaleString() : ''}</small>
+
+            <small>{new Date(post.createdAt).toLocaleString()}</small>
+
             <div className="announcement-actions">
-              <button onClick={() => togglePin(post._id)}>{post.pinned ? '📌 Unpin' : '📌 Pin'}</button>
+              <button onClick={() => togglePin(post._id)}>
+                {post.pinned ? '📌 Unpin' : '📌 Pin'}
+              </button>
               <button onClick={() => startEdit(post)}>Edit</button>
               <button onClick={() => deletePost(post._id)}>Delete</button>
             </div>
+
+            {/* Comments Section */}
             <div className="comments-section">
               <h4>Comments</h4>
               <ul>
@@ -243,6 +276,7 @@ const Stream = ({ classId }) => {
                   </li>
                 ))}
               </ul>
+
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -252,14 +286,12 @@ const Stream = ({ classId }) => {
                   addComment(post._id, commentText, input);
                 }}
               >
-                <input
-                  name={`comment-${post._id}`}
-                  placeholder="Add a comment..."
-                  className="comment-input"
-                />
+                <input type="text" name={`comment-${post._id}`} placeholder="Add a comment..." className="comment-input" />
                 <button type="submit" className="comment-btn">Comment</button>
               </form>
             </div>
+
+            {/* Reactions UI */}
             {renderReactions(post)}
           </div>
         ))
