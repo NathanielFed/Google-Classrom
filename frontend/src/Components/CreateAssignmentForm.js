@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const CreateAssignmentForm = () => {
+  const { classId } = useParams();
+
   const [formData, setFormData] = useState({
     title: '',
     instructions: '',
@@ -9,17 +12,13 @@ const CreateAssignmentForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const token = localStorage.getItem('token');
-    console.log('🪙 Sending token:', token);
+    console.log("📦 Sending token:", token);
 
     fetch('http://localhost:5000/api/assignments', {
       method: 'POST',
@@ -27,103 +26,107 @@ const CreateAssignmentForm = () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        classroomId: classId,
+      }),
     })
       .then((res) => {
         if (!res.ok) throw new Error('Failed to create assignment');
         return res.json();
       })
-      .then((data) => {
-        console.log('Assignment created:', data);
-        alert('Assignment created successfully');
-        setFormData({
-          title: '',
-          instructions: '',
-          deadline: '',
-          classroomId: '',
-        });
+      .then(() => {
+        alert('✅ Assignment created successfully');
+        setFormData({ title: '', instructions: '', deadline: '' });
       })
       .catch((err) => {
-        console.error('Error:', err);
-        alert('Error creating assignment');
+        console.error('❌ Error creating assignment:', err);
+        alert('❌ Error creating assignment');
       });
   };
 
-  const containerStyle = {
-    maxWidth: '500px',
-    margin: '50px auto',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '10px',
-    backgroundColor: '#f9f9f9',
-    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-  };
-
-  const labelStyle = {
-    fontWeight: 'bold',
-    marginBottom: '5px',
-    display: 'block',
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '10px',
-    marginBottom: '15px',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-  };
-
-  const buttonStyle = {
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    padding: '10px 20px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  };
-
-  const textareaStyle = {
-    ...inputStyle,
-    height: '100px',
-  };
-
   return (
-    <div style={containerStyle}>
-      <h2 style={{ textAlign: 'center' }}>Create Assignment</h2>
+    <div style={{
+      maxWidth: '600px',
+      margin: '40px auto',
+      padding: '30px',
+      backgroundColor: '#f9f9f9',
+      borderRadius: '12px',
+      boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+    }}>
+      <h2 style={{
+        textAlign: 'center',
+        marginBottom: '25px',
+        fontSize: '28px',
+        color: '#333',
+      }}>
+        Create Assignment
+      </h2>
+
       <form onSubmit={handleSubmit}>
-        <div>
-          <label style={labelStyle}>Title</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-        </div>
-        <div>
-          <label style={labelStyle}>Instructions</label>
-          <textarea
-            name="instructions"
-            value={formData.instructions}
-            onChange={handleChange}
-            style={textareaStyle}
-            required
-          />
-        </div>
-        <div>
-          <label style={labelStyle}>Deadline</label>
-          <input
-            type="datetime-local"
-            name="deadline"
-            value={formData.deadline}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-        </div>
-        <button type="submit" style={buttonStyle}>Create Assignment</button>
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          placeholder="Assignment Title"
+          style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '20px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+            fontSize: '16px',
+          }}
+          required
+        />
+        <textarea
+          name="instructions"
+          value={formData.instructions}
+          onChange={handleChange}
+          placeholder="Instructions"
+          style={{
+            width: '100%',
+            padding: '12px',
+            height: '120px',
+            marginBottom: '20px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+            fontSize: '16px',
+            resize: 'vertical',
+          }}
+          required
+        />
+        <input
+          type="datetime-local"
+          name="deadline"
+          value={formData.deadline}
+          onChange={handleChange}
+          style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '20px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+            fontSize: '16px',
+          }}
+          required
+        />
+        <button
+          type="submit"
+          style={{
+            padding: '12px 24px',
+            fontSize: '16px',
+            backgroundColor: '#4CAF50',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            width: '100%',
+          }}
+        >
+          Create
+        </button>
       </form>
     </div>
   );

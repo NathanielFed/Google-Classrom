@@ -1,3 +1,4 @@
+// middleware/verifyToken.js
 import jwt from 'jsonwebtoken';
 
 const verifyToken = (req, res, next) => {
@@ -9,13 +10,16 @@ const verifyToken = (req, res, next) => {
   }
 
   const token = authHeader.split(' ')[1];
-  console.log('🔍 Extracted Token:', token);
-  console.log('🔑 JWT_SECRET:', process.env.JWT_SECRET);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('✅ Decoded Token:', decoded);
-    req.user = decoded;
+
+    req.user = {
+      id: decoded.userId, // match what you sign in the JWT
+      email: decoded.email,
+    };
+
     next();
   } catch (err) {
     console.error('❌ JWT verification failed:', err.message);

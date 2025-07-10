@@ -10,6 +10,9 @@ import submissions from './routes/submissions.js';
 
 dotenv.config();
 
+console.log("🔑 JWT Secret loaded:", process.env.JWT_SECRET);
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
