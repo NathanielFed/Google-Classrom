@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, useParams } from 'react-router-dom';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import { TeacherDashboard, StudentDashboard } from './Pages/Dashboard';
@@ -9,17 +9,22 @@ import CLassForm from './Components/ClassForm';
 import Navbar from './Components/Navbar';
 import Sidebar from './Components/Sidebar';
 import GradingForm from './Components/GradingForm';
-import JoinClass from './Components/JoinClass'
+import JoinClass from './Components/JoinClass';
 import CreateAssignmentForm from './Components/CreateAssignmentForm';
 import StudentSubmissionPage from './Pages/StudentSubmissionPage';
 import AssignmentsListPage from './Pages/AssignmentsListPage';
+
+function StreamWithParams() {
+  const { classId } = useParams();
+  return <Stream classId={classId} />;
+}
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const userProfilePic = null;
 
   const isAuthenticated = false;
-  const userRole = 'student';
+  const userRole = 'teacher';
 
   const handleToggleSidebar = () => {
     setSidebarCollapsed((prev) => !prev);
@@ -35,6 +40,7 @@ function App() {
               onToggleSidebar={handleToggleSidebar}
               isSidebarCollapsed={sidebarCollapsed}
               userProfilePic={userProfilePic}
+              userRole={userRole}
             />
             <div className="sidebar">
               <Sidebar collapsed={sidebarCollapsed} />
@@ -56,8 +62,6 @@ function App() {
               <Route path="/gradingForm" element={<GradingForm />} />
               <Route path="/joinClass" element={<JoinClass />} />
               <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
-              <Route path="/assignments/:classroomId" element={<AssignmentsListPage />} />
-              <Route path="/submit-assignment/:assignmentId" element={<StudentSubmissionPage />} />
             </Routes>
           </div>
         </main>

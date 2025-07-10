@@ -2,15 +2,26 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { FaBars, FaPlus, FaTh, FaUserCircle } from "react-icons/fa";
+import ClassForm from "./ClassForm";
+import JoinClass from "./JoinClass";
 
-const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic }) => {
+const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic, userRole }) => {
   const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("token");
   const [showJoinTooltip, setShowJoinTooltip] = useState(false);
+  const [showClassModal, setShowClassModal] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
+  };
+
+  const handlePlusClick = () => {
+    setShowClassModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowClassModal(false);
   };
 
   return (
@@ -31,10 +42,10 @@ const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic }) => {
             onMouseEnter={() => setShowJoinTooltip(true)}
             onMouseLeave={() => setShowJoinTooltip(false)}
           >
-            <button className="navbar-icon-btn" aria-label="Join class">
+            <button className="navbar-icon-btn" aria-label="Join or Create class" onClick={handlePlusClick}>
               <FaPlus />
             </button>
-            {showJoinTooltip && <span className="navbar-tooltip">Join class</span>}
+            {showJoinTooltip && <span className="navbar-tooltip">{userRole === "teacher" ? "Create class" : "Join class"}</span>}
           </div>
           <button className="navbar-icon-btn" aria-label="Google apps">
             <FaTh className="navbar-waffle" />
@@ -53,6 +64,11 @@ const Navbar = ({ onToggleSidebar, isSidebarCollapsed, userProfilePic }) => {
           <button className="navbar-link navbar-logout-btn" onClick={handleLogout}>Logout</button>
         )}
       </div>
+      {showClassModal && (
+        userRole === "teacher"
+          ? <ClassForm onClose={handleCloseModal} />
+          : <JoinClass onClose={handleCloseModal} />
+      )}
     </nav>
   );
 };
