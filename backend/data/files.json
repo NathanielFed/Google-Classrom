@@ -1,18 +1,1 @@
-[
-  {
-    "filename": "1751936892002-Screenshot 2025-07-07 at 5.02.12â¯PM.png",
-    "path": "uploads/1751936892002-Screenshot 2025-07-07 at 5.02.12â¯PM.png",
-    "url": "http://localhost:4000/uploads/1751936892002-Screenshot 2025-07-07 at 5.02.12â¯PM.png",
-    "userId": "user123",
-    "assignmentId": "assign456",
-    "uploadedAt": "2025-07-08T01:08:12.010Z"
-  },
-  {
-    "filename": "1751937528061-Screenshot 2025-07-07 at 4.24.26â¯PM.png",
-    "path": "uploads/1751937528061-Screenshot 2025-07-07 at 4.24.26â¯PM.png",
-    "url": "http://localhost:4000/uploads/1751937528061-Screenshot 2025-07-07 at 4.24.26â¯PM.png",
-    "userId": "user123",
-    "assignmentId": "assign456",
-    "uploadedAt": "2025-07-08T01:18:48.069Z"
-  }
-]
+[]
