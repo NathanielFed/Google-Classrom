@@ -33,39 +33,38 @@ function App() {
   const showNavAndSidebar = window.location.pathname.startsWith('/dashboard');
 
   return (
-      <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
-        {showNavAndSidebar && (
-          <>
-            <Navbar
-              onToggleSidebar={handleToggleSidebar}
-              isSidebarCollapsed={sidebarCollapsed}
-              userProfilePic={userProfilePic}
-              userRole={userRole}
-            />
-            <div className="sidebar">
-              <Sidebar collapsed={sidebarCollapsed} />
-            </div>
-          </>
-        )}
-
-        <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
-          <div className="content-wrapper">
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/dashboard"
-                element={userRole === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />}
-              />
-              <Route path="/classForm" element={<CLassForm />} />
-              <Route path="/stream" element={<Stream />} />
-              <Route path="/gradingForm" element={<GradingForm />} />
-              <Route path="/joinClass" element={<JoinClass />} />
-              <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
-            </Routes>
+    <div className={`app-main-layout${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+      {showNavAndSidebar && (
+        <>
+          <Navbar
+            onToggleSidebar={handleToggleSidebar}
+            isSidebarCollapsed={sidebarCollapsed}
+            userProfilePic={userProfilePic}
+            userRole={userRole}
+          />
+          <div className="sidebar">
+            <Sidebar collapsed={sidebarCollapsed} />
           </div>
-        </main>
-      </div>
+        </>
+      )}
+      <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
+        <div className="content-wrapper">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={userRole === 'teacher' ? <TeacherDashboard /> : <StudentDashboard />}
+            />
+            <Route path="/classForm" element={<CLassForm />} />
+            <Route path="/stream" element={<Stream />} />
+            <Route path="/gradingForm" element={<GradingForm />} />
+            <Route path="/joinClass" element={<JoinClass />} />
+            <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
+          </Routes>
+        </div>
+      </main>
+    </div>
   );
 }
 
