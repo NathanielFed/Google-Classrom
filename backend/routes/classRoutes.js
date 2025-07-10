@@ -53,7 +53,7 @@ router.get('/class-list', async (req, res) => {
   const email = req.query.email;
   console.log("hi");
   try {
-    const classes = await Class.find({teacherID: "686bb94e51f344189d55bab2" });
+    const classes = await Class.find({teacherID: "686bb94e51f344189d55bab2" }); //Change to user pls tnx
     console.log(classes);
     res.status(200).json({ success: true, data: classes });
   } catch (err) {
