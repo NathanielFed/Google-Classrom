@@ -26,15 +26,40 @@ const AssignmentsList = ({ classroomId }) => {
 
   return (
     <div>
-      <h2>Assignments</h2>
+      <h2 style={{
+        fontSize: '26px',
+        marginBottom: '20px',
+        color: '#2c3e50',
+        textAlign: 'center'
+      }}>
+        Assignments for Class: {classroomId}
+      </h2>
+
       {assignments.length === 0 ? (
-        <p>No assignments yet.</p>
+        <p style={{ textAlign: 'center', color: '#888' }}>No active assignments yet.</p>
       ) : (
-        <ul>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
           {assignments.map((assignment) => (
-            <li key={assignment._id}>
-              <strong>{assignment.title}</strong> – due {new Date(assignment.deadline).toLocaleString()}
-              <p>{assignment.instructions}</p>
+            <li
+              key={assignment._id}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: '10px',
+                padding: '20px',
+                marginBottom: '20px',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                transition: '0.2s ease-in-out',
+              }}
+            >
+              <h3 style={{ fontSize: '20px', color: '#34495e', marginBottom: '10px' }}>
+                {assignment.title}
+              </h3>
+              <p style={{ fontSize: '14px', color: '#555', marginBottom: '5px' }}>
+                <strong>Due:</strong> {new Date(assignment.deadline).toLocaleString()}
+              </p>
+              <p style={{ fontSize: '15px', color: '#666' }}>
+                {assignment.instructions}
+              </p>
             </li>
           ))}
         </ul>
