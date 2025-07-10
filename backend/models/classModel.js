@@ -34,14 +34,10 @@ const classSchema = new mongoose.Schema({
         trim: true,
     },
     students: {
-        type: [String], // ← array of strings
+        type: [String],
         default: [],
         trim: true
     },
-    classCode: {
-        type: String,
-        trim: true,
-    }
 }, {
     _id: true,
     timestamps: true

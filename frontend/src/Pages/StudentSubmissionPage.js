@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import StudentSubmissionForm from '../Components/StudentSubmissionForm';
+import StudentSubmissionStatus from '../Components/StudentSubmissionStatus';
 
 const StudentSubmissionPage = () => {
   const { assignmentId } = useParams();
@@ -25,6 +26,8 @@ const StudentSubmissionPage = () => {
       </h2>
 
       <StudentSubmissionForm assignmentId={assignmentId} />
+      <StudentSubmissionStatus assignmentId={assignmentId} />
+
     </div>
   );
 };

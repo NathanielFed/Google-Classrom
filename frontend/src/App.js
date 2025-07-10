@@ -11,6 +11,8 @@ import JoinClass from './Components/JoinClass';
 import CreateAssignmentForm from './Components/CreateAssignmentForm';
 import StudentSubmissionPage from './Pages/StudentSubmissionPage';
 import AssignmentsListPage from './Pages/AssignmentsListPage';
+import TeacherSubmissionPage from './Pages/TeacherSubmissionPage';
+
 
 function StreamWithParams() {
   const { classId } = useParams();
@@ -45,6 +47,9 @@ function App() {
             <Route path="/stream/:classId" element={<StreamWithParams />} />
             <Route path="/stream/:classId/create-assignment" element={<CreateAssignmentForm />}/>
             <Route path="/stream/:classId/assignments/:assignmentId/submissions" element={<StudentSubmissionPage />} />
+             <Route path="/stream/:classId/assignments" element={<AssignmentsListPage />} />
+            <Route path="/stream/:classId/assignments/:assignmentId/submissions" element={<StudentSubmissionPage />} />
+            <Route path="/assignments/:assignmentId/view-submissions" element={<TeacherSubmissionPage />} />
             <Route path="*" element={<div>Page Not Found</div>} />
           </Routes>
         </div>

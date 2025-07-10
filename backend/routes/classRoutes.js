@@ -29,7 +29,8 @@ router.post('/create', async (req, res) => {
       section,
       subject,
       room,
-      classCode
+      classCode,
+      students : []
     });
 
     await newClass.save();
@@ -43,6 +44,7 @@ router.post('/create', async (req, res) => {
     console.log(`- Section: ${section}`);
     console.log(`- Subject: ${subject}`);
     console.log(`- Room: ${room}`);
+    console.log(`- Students: ${newClass.students.join(', ')}`);
 
     res.status(201).json({
       success: true,

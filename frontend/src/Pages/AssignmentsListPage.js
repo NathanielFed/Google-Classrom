@@ -22,7 +22,7 @@ const teacherClasses = [
 ];
 
 const AssignmentsListPage = () => {
-  const { classroomId } = useParams();
+  const { classroomId } = useParams(); // must match route param
   const classData = teacherClasses.find(c => c.id === classroomId);
 
   return (
@@ -37,7 +37,8 @@ const AssignmentsListPage = () => {
       <h2 style={{ marginBottom: '20px', color: '#333', fontSize: '28px', textAlign: 'center' }}>
         {classData ? `Assignments for ${classData.title} - ${classData.section}` : 'Class not found'}
       </h2>
-      
+
+      {classData && <AssignmentsList classroomId={classData.id} />}
     </div>
   );
 };
