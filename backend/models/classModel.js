@@ -6,6 +6,11 @@ const classSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    teacherEmail: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     className: {
         type: String,
         required: true,

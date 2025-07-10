@@ -40,6 +40,12 @@ function App() {
             <Route path="/gradingForm" element={<GradingForm />} />
             <Route path="/joinClass" element={<JoinClass />} />
             <Route path="/createAssignmentForm" element={<CreateAssignmentForm />} />
+            <Route path="/assignments" element={<AssignmentsListPage />} />
+            <Route path="/assignments/:assignmentId/submissions" element={<StudentSubmissionPage />} />
+            <Route path="/stream/:classId" element={<StreamWithParams />} />
+            <Route path="/stream/:classId/assignments" element={<AssignmentsListPage />} />
+            <Route path="/stream/:classId/assignments/:assignmentId/submissions" element={<StudentSubmissionPage />} />
+            <Route path="*" element={<div>Page Not Found</div>} />
           </Routes>
         </div>
       </main>

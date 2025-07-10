@@ -104,7 +104,7 @@ export function StudentDashboard({ sidebarCollapsed, onToggleSidebar, userProfil
             id: cls._id,
             title: cls.className,
             section: cls.section || "",
-            teacher: cls.teacherID,
+            teacher: cls.teacherEmail,
             color: getRandomColor(),
           }));
           setClasses(formatted);
