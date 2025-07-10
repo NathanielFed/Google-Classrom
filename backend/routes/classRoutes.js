@@ -59,8 +59,10 @@ router.get('/class-list', async (req, res) => {
   const email = req.query.email;
   try {
     const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
     console.log(user.id);
-    
     const teacherclasses = await Class.find({
       $or: [
         { teacherID: user._id },
