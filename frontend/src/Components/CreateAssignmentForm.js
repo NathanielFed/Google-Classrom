@@ -5,7 +5,6 @@ const CreateAssignmentForm = () => {
     title: '',
     instructions: '',
     deadline: '',
-    classroomId: '',
   });
 
   const handleChange = (e) => {
@@ -119,17 +118,6 @@ const CreateAssignmentForm = () => {
             type="datetime-local"
             name="deadline"
             value={formData.deadline}
-            onChange={handleChange}
-            style={inputStyle}
-            required
-          />
-        </div>
-        <div>
-          <label style={labelStyle}>Classroom ID</label>
-          <input
-            type="text"
-            name="classroomId"
-            value={formData.classroomId}
             onChange={handleChange}
             style={inputStyle}
             required
