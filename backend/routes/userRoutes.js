@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import express from "express";
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -20,8 +21,11 @@ router.post("/login-or-register", async (req, res) => {
       });
       await user.save();
     }
-
-    res.status(200).json({ message: "User login/register success", user });
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" });
+    res.status(200).json({ message: "User login/register success", user, token });
   } catch (err) {
     console.error("DB error:", err);
     res.status(500).json({ error: "Server error" });

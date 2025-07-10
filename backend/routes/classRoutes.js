@@ -15,6 +15,17 @@ router.post('/create', async (req, res) => {
   }
 });
 
+router.get('/class-list', async (req, res) => {
+  const email = req.query.email;
+  try {
+    const classes = await Class.find({students: email }); 
+    res.status(200).json({ success: true, data: classes });
+  } catch (err) {
+    console.error('Error fetching class list:', err);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
 
 
 router.post('/join', async (req, res) => {
@@ -30,12 +41,10 @@ router.post('/join', async (req, res) => {
       return res.status(404).json({ success: false, error: 'Class not found' });
     }
 
-    // Prevent duplicate join
     if (classroom.students.includes(email)) {
       return res.status(400).json({ success: false, error: 'User already joined this class' });
     }
 
-    // Add student ID to class
     classroom.students.push(email);
     await classroom.save();
 

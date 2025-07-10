@@ -20,26 +20,7 @@ const teacherClasses = [
   }
 ];
 
-const studentClasses = [
-  {
-    id: 1,
-    title: "CSDC105",
-    section: "Section N1Am",
-    teacher: "Prof. Agawa",
-    assignmentsDue: 2,
-    announcements: 1,
-    color: "#4285F4"
-  },
-  {
-    id: 2,
-    title: "ITMC313",
-    section: "Section N2Am",
-    teacher: "Prof. Sereno",
-    assignmentsDue: 0,
-    announcements: 0,
-    color: "#34A853"
-  }
-];
+
 
 const TeacherDashboard = () => {
   return (
@@ -72,38 +53,69 @@ const TeacherDashboard = () => {
 };
 
 const StudentDashboard = () => {
+  // const [assignmentsData, setAssignmentsData] = useState({});
+
+  // useEffect(() => {
+  //   const fetchAssignments = async () => {
+  //     const token = localStorage.getItem("token");
+  //     const updatedData = {};
+
+  //     // for (const cls of studentClasses) {
+  //     //   try {
+  //     //     const res = await fetch(`http://localhost:5000/api/assignments/classroom/${cls.id}`, {
+  //     //       headers: { Authorization: `Bearer ${token}` }
+  //     //     });
+
+  //     //     const assignments = await res.json();
+  //     //     const now = new Date();
+
+  //     //     const activeAssignments = assignments.filter(
+  //     //       (a) => new Date(a.deadline) > now
+  //     //     );
+
+  //     //     updatedData[cls.id] = activeAssignments.length;
+  //     //   } catch (err) {
+  //     //     console.error(`Error fetching assignments for class ${cls.title}:`, err);
+  //     //     updatedData[cls.id] = 0;
+  //     //   }
+  //     // }
+  //     //setAssignmentsData(updatedData);
+
+
+  //   };
+
+  //   fetchAssignments();
+  // }, []);
+
+
+
   const [assignmentsData, setAssignmentsData] = useState({});
+  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    const fetchAssignments = async () => {
-      const token = localStorage.getItem("token");
-      const updatedData = {};
-
-      for (const cls of studentClasses) {
-        try {
-          const res = await fetch(`http://localhost:4000/api/assignments/classroom/${cls.id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-
-          const assignments = await res.json();
-          const now = new Date();
-
-          const activeAssignments = assignments.filter(
-            (a) => new Date(a.deadline) > now
-          );
-
-          updatedData[cls.id] = activeAssignments.length;
-        } catch (err) {
-          console.error(`Error fetching assignments for class ${cls.title}:`, err);
-          updatedData[cls.id] = 0;
+    const email = localStorage.getItem("email");
+    fetch(`http://localhost:5000/api/classes/class-list?email=${encodeURIComponent(email)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const formatted = data.data.map(cls => ({
+            id: cls._id,
+            title: cls.className,
+            section: cls.section || "",
+            teacher: cls.teacherID,
+            color: getRandomColor(),
+          }));
+          setClasses(formatted);
+        } else {
         }
-      }
-
-      setAssignmentsData(updatedData);
-    };
-
-    fetchAssignments();
+      })
+      .catch(err => {
+      });
   }, []);
+  const getRandomColor = () => {
+    const colors = ["#4285F4", "#EA4335", "#FBBC05", "#34A853"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
 
   return (
     <div className="dashboard-container">
@@ -111,7 +123,7 @@ const StudentDashboard = () => {
         <h1>Classes</h1>
       </div>
       <div className="class-grid">
-        {studentClasses.map((cls) => (
+        {classes.map((cls) => (
           <div className="class-card" key={cls.id}>
             <div
               className="class-card-header"
@@ -126,9 +138,7 @@ const StudentDashboard = () => {
             <div className="class-card-body">
               <div className="class-card-teacher">{cls.teacher}</div>
               <div className="class-card-stats">
-                <div>
-                  {assignmentsData[cls.id] ?? "..."} assignments due
-                </div>
+                <div>{assignmentsData[cls.id] ?? "..."} assignments due</div>
                 <div>0 new announcements</div>
               </div>
             </div>
@@ -138,5 +148,6 @@ const StudentDashboard = () => {
     </div>
   );
 };
+
 
 export { TeacherDashboard, StudentDashboard };
