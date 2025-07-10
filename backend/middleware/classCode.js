@@ -10,4 +10,4 @@ const generateClassCode = () => {
   return result;
 };
 
-module.exports = generateClassCode;
+export default generateClassCode;
