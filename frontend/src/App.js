@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
-import { Routes, Route, BrowserRouter, useParams } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import { TeacherDashboard, StudentDashboard } from './Pages/Dashboard';

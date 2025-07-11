@@ -57,6 +57,9 @@ router.post('/create', async (req, res) => {
 
 router.get('/class-list', async (req, res) => {
   const email = req.query.email;
+
+  console.log("adfasdf");
+  console.log(email);
   try {
     const user = await User.findOne({ email: email });
     console.log(user.id);

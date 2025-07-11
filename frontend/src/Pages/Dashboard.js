@@ -19,7 +19,8 @@ export function TeacherDashboard({ sidebarCollapsed, onToggleSidebar, userProfil
       setError(null);
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/classes/class-list", {
+        const email = localStorage.getItem("email");
+        const res = await fetch(`http://localhost:5000/api/classes/class-list?email=${email}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (!res.ok) throw new Error("Failed to fetch classes");
