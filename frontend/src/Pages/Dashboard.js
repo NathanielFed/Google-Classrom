@@ -96,10 +96,14 @@ export function StudentDashboard({ sidebarCollapsed, onToggleSidebar, userProfil
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const email = localStorage.getItem("email");
-    fetch(`http://localhost:5000/api/classes/class-list?email=${encodeURIComponent(email)}`)
-      .then(res => res.json())
-      .then(data => {
+    const fetchClasses = async () => {
+      const email = localStorage.getItem("email");
+      const token = localStorage.getItem("token");
+      try {
+        const res = await fetch(`http://localhost:5000/api/classes/class-list?email=${encodeURIComponent(email)}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
         if (data.success) {
           const formatted = data.data.map(cls => ({
             id: cls._id,
@@ -112,11 +116,13 @@ export function StudentDashboard({ sidebarCollapsed, onToggleSidebar, userProfil
         } else {
           setError("Failed to fetch class list");
         }
-      })
-      .catch(err => {
+      } catch (err) {
         setError("Error fetching class list");
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchClasses();
   }, []);
 
   useEffect(() => {

@@ -22,6 +22,7 @@ function Login() {
       if (res.ok && data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("email", data.user.email);
+        localStorage.setItem("name", data.user.name || ""); // <- This line fixes the name issue
         return { success: true };
       } else {
         return { success: false, message: data.message || "Login failed" };
